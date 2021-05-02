@@ -1,0 +1,12 @@
+# General
+.DS_Store
+.idea
+
+# Environment
+__pycache__
+get-pip.py
+venv
+
+# Project
+env.py
+env.pyc
