@@ -8,5 +8,4 @@ get-pip.py
 venv
 
 # Project
-env.py
-env.pyc
+.env
