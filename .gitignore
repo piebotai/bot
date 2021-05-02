@@ -9,3 +9,4 @@ venv
 
 # Project
 .env
+test-*.py
