@@ -66,7 +66,7 @@ async def rebalance():
 
     # Sets the minimum and maximum order values, so we don't eat into our USDT balance too quickly
     min_order_value = 0.25
-    max_order_value = 0.40
+    max_order_value = 0.50
 
     for pair in pairs:
         time.sleep(0.5)
