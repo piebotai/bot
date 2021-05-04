@@ -125,9 +125,9 @@ async def rebalance():
                 print(colored(" [SKIP]", "yellow"))
 
         else:
-            # print(colored(current_time + ": ", "yellow"), end='')
-            # print(pair[0], end='')
-            # print(colored(" [SKIP]", "yellow"))
+            print(colored(current_time + ": ", "yellow"), end='')
+            print(pair[0], end='')
+            print(colored(" [SKIP]", "yellow"))
             pass
 
     print(colored("Waiting...", "cyan"))
