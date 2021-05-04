@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 # Import required packages
+import os
+import sys
 import asyncio
 import aioschedule as schedule
 import cryptocom.exchange as cro
-import os
 from termcolor import colored
 import time
 
@@ -14,6 +15,11 @@ load_dotenv()
 API_KEY = os.getenv('API_KEY')
 API_SECRET = os.getenv('API_SECRET')
 ENVIRONMENT = os.getenv('ENVIRONMENT')
+
+# Kill the script if no environment has been defined
+if not ENVIRONMENT:
+    print(colored(".env is missing a defined environment. This should either be 'production' or 'dev'", "red"))
+    sys.exit()
 
 # Let users know the bot has started, and is waiting to be called
 print(colored("Bot started", "green"))
