@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
 API_SECRET = os.getenv('API_SECRET')
+ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 # Let users know the bot has started, and is waiting to be called
 print(colored("Bot started", "green"))
@@ -104,7 +105,8 @@ async def rebalance():
 
             # Submit a buy order if necessary
             if buy_order:
-                await account.buy_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
+                if ENVIRONMENT == "production":
+                    await account.buy_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
                 print_value = round(order_value, 2)
                 print(colored(current_time + ": ", "yellow"), end='')
                 print(str(print_value) + " USDT - " + pair[0], end='')
@@ -112,7 +114,8 @@ async def rebalance():
 
             # Submit a sell order if necessary
             elif sell_order:
-                await account.sell_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
+                if ENVIRONMENT == "production":
+                    await account.sell_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
                 print_value = round(difference, 2)
                 print(colored(current_time + ": ", "yellow"), end='')
                 print(str(print_value) + " USDT - " + pair[0], end='')
@@ -132,10 +135,14 @@ async def rebalance():
 
     print(colored("Waiting...", "cyan"))
 
-schedule.every().hour.at(":00").do(rebalance)
+if ENVIRONMENT == "production":
+    schedule.every().hour.at(":00").do(rebalance)
 
-loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
 
-while True:
-    loop.run_until_complete(schedule.run_pending())
-    time.sleep(1)
+    while True:
+        loop.run_until_complete(schedule.run_pending())
+        time.sleep(1)
+
+else:
+    asyncio.run(rebalance())
