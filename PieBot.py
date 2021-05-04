@@ -49,6 +49,7 @@ async def rebalance():
     # Adds up the total balance of all enabled coins and the USDT balance
     total_balance = usdt_balance
     for pair in pairs:
+        time.sleep(0.5)
         total_coins = balances[cro.coins.Coin(pair[0])].total
         coin_price = await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
         total_balance = total_balance + (total_coins * coin_price)
@@ -61,59 +62,73 @@ async def rebalance():
     max_order_value = 0.40
 
     for pair in pairs:
+        time.sleep(0.5)
+
         # Sets null defaults
         buy_order = False
         sell_order = False
         difference = 0
         order_value = 0
+        pair_value = 0
 
         # Calculate the USDT value of this coin pair
         pair_total_coins = balances[cro.coins.Coin(pair[0])].total
         pair_coin_price = await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
         pair_value = pair_total_coins * pair_coin_price
 
-        # If the coin pair value is over target, sell the excess if it's greater than the minimum order value
-        if pair_value > target_per_coin:
-            difference = pair_value - target_per_coin
-            if difference >= min_order_value:
-                sell_order = True
-                order_value = difference / await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
+        time.sleep(0.5)
 
-        # If the coin pair value is under target, work out how much we need to buy
-        elif pair_value < target_per_coin:
-            difference = target_per_coin - pair_value
+        if pair_value > 0:
+            # If the coin pair value is over target, sell the excess if it's greater than the minimum order value
+            if pair_value > target_per_coin:
+                difference = pair_value - target_per_coin
+                if difference >= min_order_value:
+                    sell_order = True
+                    order_value = difference / await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
 
-            # If the difference is between min_order_value and max_order_value (inclusive), set the difference as the order value
-            if min_order_value <= difference <= max_order_value:
-                buy_order = True
-                order_value = difference
+            # If the coin pair value is under target, work out how much we need to buy
+            elif pair_value < target_per_coin:
+                difference = target_per_coin - pair_value
 
-            # If the difference is greater than max_order_value, set the order value as max_order_value
-            elif difference > max_order_value:
-                buy_order = True
-                order_value = max_order_value
+                # If the difference is between min_order_value and max_order_value (inclusive), set the difference as the order value
+                if min_order_value <= difference <= max_order_value:
+                    buy_order = True
+                    order_value = difference
 
-        # Submit a buy order if necessary
-        if buy_order:
-            await account.buy_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
-            print_value = round(order_value, 2)
-            print(colored(current_time + ": ", "yellow"), end='')
-            print(str(print_value) + " USDT - " + pair[0], end='')
-            print(colored(" [BUY]", "green"))
+                # If the difference is greater than max_order_value, set the order value as max_order_value
+                elif difference > max_order_value:
+                    buy_order = True
+                    order_value = max_order_value
 
-        # Submit a sell order if necessary
-        elif sell_order:
-            await account.sell_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
-            print_value = round(difference, 2)
-            print(colored(current_time + ": ", "yellow"), end='')
-            print(str(print_value) + " USDT - " + pair[0], end='')
-            print(colored(" [SELL]", "magenta"))
+            time.sleep(0.5)
 
-        # Neither a buy or sell order was required this time, so print a user friendly message
+            # Submit a buy order if necessary
+            if buy_order:
+                await account.buy_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
+                print_value = round(order_value, 2)
+                print(colored(current_time + ": ", "yellow"), end='')
+                print(str(print_value) + " USDT - " + pair[0], end='')
+                print(colored(" [BUY]", "green"))
+
+            # Submit a sell order if necessary
+            elif sell_order:
+                await account.sell_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
+                print_value = round(difference, 2)
+                print(colored(current_time + ": ", "yellow"), end='')
+                print(str(print_value) + " USDT - " + pair[0], end='')
+                print(colored(" [SELL]", "magenta"))
+
+            # Neither a buy or sell order was required this time, so print a user friendly message
+            else:
+                print(colored(current_time + ": ", "yellow"), end='')
+                print(pair[0], end='')
+                print(colored(" [SKIP]", "yellow"))
+
         else:
-            print(colored(current_time + ": ", "yellow"), end='')
-            print(pair[0], end='')
-            print(colored(" [SKIP]", "yellow"))
+            # print(colored(current_time + ": ", "yellow"), end='')
+            # print(pair[0], end='')
+            # print(colored(" [SKIP]", "yellow"))
+            pass
 
     print(colored("Waiting...", "cyan"))
 
