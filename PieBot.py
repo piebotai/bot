@@ -81,7 +81,9 @@ async def rebalance():
         # Calculate the USDT value of this coin pair
         pair_total_coins = balances[cro.coins.Coin(pair[0])].total
         pair_coin_price = await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
-        pair_value = pair_total_coins * pair_coin_price
+
+        if pair_total_coins and pair_coin_price > 0:
+            pair_value = pair_total_coins * pair_coin_price
 
         time.sleep(0.5)
 
