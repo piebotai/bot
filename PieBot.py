@@ -26,7 +26,7 @@ print(colored("Bot started", "green"))
 
 
 async def rebalance():
-    # Lets users know the bot has been called and is running
+    # Let users know the bot has been called and is running
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S - %d/%m/%Y", t)
     print(colored(current_time + ": ", "yellow"), end='')
