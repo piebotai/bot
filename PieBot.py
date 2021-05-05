@@ -1,10 +1,9 @@
-import asyncio
-import aioschedule as schedule
 import hashlib
 import hmac
 import json
 import os
 import requests
+import schedule
 import sys
 from termcolor import colored
 import time
@@ -38,7 +37,7 @@ pair_list = [
 print(colored("Bot started", "green"))
 
 
-async def piebot(pairs):
+def piebot(pairs):
     if len(pairs) < 1:
         print(colored("You need to use at least one coin pair", "red"))
         sys.exit()
@@ -51,13 +50,11 @@ async def piebot(pairs):
 
 
 if ENVIRONMENT == "production":
-    schedule.every().hour.at(":00").do(piebot)
-
-    loop = asyncio.get_event_loop()
+    schedule.every().hour.at(":00").do(piebot, pairs=pair_list)
 
     while True:
-        loop.run_until_complete(schedule.run_pending())
+        schedule.run_pending()
         time.sleep(1)
 
 else:
-    asyncio.run(piebot(pairs=pair_list))
+    piebot(pairs=pair_list)
