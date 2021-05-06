@@ -21,16 +21,16 @@ if not ENVIRONMENT:
     sys.exit()
 
 pair_list = [
-    "ADA_USDT",
-    "ALGO_USDT",
-    "ATOM_USDT",
-    "BTC_USDT",
-    "CRO_USDT",
-    "DOT_USDT",
-    "ETH_USDT",
-    "LTC_USDT",
-    "XLM_USDT",
-    "XRP_USDT"
+    ("ADA", "ADA_USDT"),
+    ("ALGO", "ALGO_USDT"),
+    ("ATOM", "ATOM_USDT"),
+    ("BTC", "BTC_USDT"),
+    ("CRO", "CRO_USDT"),
+    ("DOT", "DOT_USDT"),
+    ("ETH", "ETH_USDT"),
+    ("LTC", "LTC_USDT"),
+    ("XLM", "XLM_USDT"),
+    ("XRP", "XRP_USDT")
 ]
 
 # Let users know the bot has started, and is waiting to be called
@@ -38,7 +38,6 @@ print(colored("Bot started", "green"))
 
 
 def sign_request(req):
-    # Ensure the params are alphabetically sorted by key
     param_string = ''
 
     if 'params' in req:
@@ -80,14 +79,11 @@ def piebot(pairs):
         "nonce": int(time.time() * 1000)
     }
 
-    # Sign the post request payload.
-    usdt_balance_request = sign_request(req=usdt_balance_request)
-
-    # Request the users account summary.
-    headers = {'Content-type': 'application/json'}
-    usdt_balance_response = requests.post('https://api.crypto.com/v2/private/get-account-summary', headers=headers, data=json.dumps(usdt_balance_request))
-    usdt_balance_summary = json.loads(usdt_balance_response.content)
-    usdt_total_balance = usdt_balance_summary['result']['accounts'][0]['balance']
+    usdt_balance_response = requests.post('https://api.crypto.com/v2/private/get-account-summary',
+                                          headers={'Content-type': 'application/json'},
+                                          data=json.dumps(sign_request(req=usdt_balance_request)))
+    usdt_balance_data = json.loads(usdt_balance_response.content)
+    usdt_total_balance = usdt_balance_data['result']['accounts'][0]['balance']
     print(usdt_total_balance)
 
     if usdt_total_balance > 0:
@@ -97,11 +93,40 @@ def piebot(pairs):
         print(colored("Could not get the current USDT balance for your account", "red"))
         sys.exit()
 
+    # Adds up the total balance of all enabled coins and the USDT balance
+    total_balance = usdt_balance
+    for pair in pairs:
+        # Gets the total number of coins for this coin pair
+        coin_balance = 0
+        coin_balance_request = {
+            "id": 100,
+            "method": "private/get-account-summary",
+            "api_key": API_KEY,
+            "params": {
+                "currency": pair[0]
+            },
+            "nonce": int(time.time() * 1000)
+        }
+
+        coin_balance_request = sign_request(req=coin_balance_request)
+        coin_balance_response = requests.post('https://api.crypto.com/v2/private/get-account-summary',
+                                              headers={'Content-type': 'application/json'},
+                                              data=json.dumps(coin_balance_request))
+        coin_balance_data = json.loads(coin_balance_response.content)
+        coin_balance = coin_balance_data['result']['accounts'][0]['balance']
+
+        get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair[1])
+        ticker = json.loads(get_price_response.content)
+        coin_price = ticker['result']['data']['b']
+
+        total_balance = total_balance + (coin_balance * coin_price)
+        print(total_balance)
+
     current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
     print(colored(current_time + ": ", "yellow"), end='')
-    print(colored("Portfolio balances collected", "green"))
+    print(colored("Portfolio balances collected. Calculating targets", "green"))
 
-    time.sleep(2)
+    time.sleep(1)
 
     current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
     print(colored(current_time + ": ", "yellow"), end='')
