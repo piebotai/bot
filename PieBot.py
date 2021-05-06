@@ -15,6 +15,11 @@ API_KEY = os.getenv('API_KEY')
 API_SECRET = os.getenv('API_SECRET')
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
+# Kill the script if the API key and API secret aren't defined
+if not API_KEY and API_SECRET:
+    print(colored(".env is missing your API key and secret", "red"))
+    sys.exit()
+
 # Kill the script if no environment has been defined
 if not ENVIRONMENT:
     print(colored(".env is missing a defined environment. This should either be 'production' or 'dev'", "red"))
@@ -32,9 +37,6 @@ pair_list = [
     ("XLM", "XLM_USDT"),
     ("XRP", "XRP_USDT")
 ]
-
-# Let users know the bot has started, and is waiting to be called
-print(colored("Bot started", "green"))
 
 
 def sign_request(req):
@@ -54,6 +56,31 @@ def sign_request(req):
     ).hexdigest()
 
     return req
+
+
+# Send a private request to test if the API key and API secret are correct
+init_request = {
+    "id": 100,
+    "method": "private/get-account-summary",
+    "api_key": API_KEY,
+    "params": {
+        "currency": "USDT"
+    },
+    "nonce": int(time.time() * 1000)
+}
+
+init_response = requests.post('https://api.crypto.com/v2/private/get-account-summary',
+                                      headers={'Content-type': 'application/json'},
+                                      data=json.dumps(sign_request(req=init_request)))
+init_status = init_response.status_code
+
+if init_status == 200:
+    # The bot can connect to the account, has been started, and is waiting to be called
+    print(colored("Bot started", "green"))
+else:
+    # Could not connect to the account
+    print(colored("Could not connect to your account. Please ensure the API key and API secret are correct", "red"))
+    sys.exit()
 
 
 def piebot(pairs):
