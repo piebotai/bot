@@ -126,11 +126,17 @@ def piebot(pairs):
     print(colored(current_time + ": ", "yellow"), end='')
     print(colored("Portfolio balances collected. Calculating targets", "green"))
 
-    time.sleep(1)
+    time.sleep(0.5)
 
-    current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
-    print(colored(current_time + ": ", "yellow"), end='')
-    print(colored("Placing orders", "green"))
+    # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
+    target_per_coin = total_balance / len(pair_list)
+    if target_per_coin > 0:
+        current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
+        print(colored(current_time + ": ", "yellow"), end='')
+        print("Target per coin: " + str(target_per_coin) + " USDT")
+    else:
+        print(colored("Could not calculate a suitable target for each coin pair", "red"))
+        sys.exit()
 
 
 if ENVIRONMENT == "production":
