@@ -83,14 +83,18 @@ else:
     sys.exit()
 
 
+def current_time():
+    time_data = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
+    print(colored(time_data + ": ", "yellow"), end='')
+
+
 def piebot(pairs):
     if len(pairs) < 1:
         print(colored("You need to use at least one coin pair", "red"))
         sys.exit()
 
     # Let users know the bot has been called and is running
-    current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
-    print(colored(current_time + ": ", "yellow"), end='')
+    current_time()
     print(colored("Collecting current balances", "cyan"))
 
     # Gets the USDT balance and keeps 25 USDT aside
@@ -149,8 +153,7 @@ def piebot(pairs):
         total_balance = total_balance + (coin_balance * coin_price)
         print(total_balance)
 
-    current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
-    print(colored(current_time + ": ", "yellow"), end='')
+    current_time()
     print(colored("Portfolio balances collected. Calculating targets", "green"))
 
     time.sleep(0.5)
@@ -158,8 +161,7 @@ def piebot(pairs):
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_balance / len(pair_list)
     if target_per_coin > 0:
-        current_time = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
-        print(colored(current_time + ": ", "yellow"), end='')
+        current_time()
         print("Target per coin: " + str(target_per_coin) + " USDT")
     else:
         print(colored("Could not calculate a suitable target for each coin pair", "red"))
