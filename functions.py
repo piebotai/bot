@@ -22,9 +22,31 @@ def buy_order(pair, quantity):
     print("Buy " + str(quantity) + " of " + pair)
 
 
+# Prints the current time
 def current_time():
     time_data = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
     print(colored(time_data + ": ", "yellow"), end='')
+
+
+# Gets the total balance of a coin
+def get_coin_balance(coin):
+    coin_balance_request = {
+        "id": 100,
+        "method": "private/get-account-summary",
+        "api_key": API_KEY,
+        "params": {
+            "currency": coin
+        },
+        "nonce": int(time.time() * 1000)
+    }
+
+    coin_balance_response = requests.post('https://api.crypto.com/v2/private/get-account-summary',
+                                          headers={'Content-type': 'application/json'},
+                                          data=json.dumps(sign_request(req=coin_balance_request)))
+    coin_balance_data = json.loads(coin_balance_response.content)
+    coin_total_balance = coin_balance_data['result']['accounts'][0]['balance']
+
+    return coin_total_balance
 
 
 def pre_flight_checks():
@@ -56,6 +78,23 @@ def pre_flight_checks():
         if len(pair_list) < 1:
             print(emoji.emojize(':x:', use_aliases=True), end=" ")
             print(colored("You need to use at least one coin pair", "red"))
+            sys.exit()
+
+    # Checks whether the USDT reserves amount has been defined
+    try:
+        usdt_reserve
+    except NameError:
+        print(emoji.emojize(':x:', use_aliases=True), end=" ")
+        print(colored("Your USDT reserve amount is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if usdt_reserve < 0:
+            print(emoji.emojize(':x:', use_aliases=True), end=" ")
+            print(colored("You need to define a valid USDT reserve. If you don't want to use a reserve, set the value as 0", "red"))
+            sys.exit()
+        elif usdt_reserve > 80:
+            print(emoji.emojize(':x:', use_aliases=True), end=" ")
+            print(colored("Your USDT reserve must be 80% or lower", "red"))
             sys.exit()
 
     # Send a private request to test if the API key and API secret are correct
