@@ -76,7 +76,12 @@ def order_buy(pair, notional):
                                   data=json.dumps(sign_request(req=order_buy_request)))
 
 
-def order_sell(pair, quantity):
+def order_sell(pair, quantity, quantity_precision):
+    if quantity_precision == 0:
+        quantity = int(quantity)
+    else:
+        quantity = round(quantity, quantity_precision)
+
     order_sell_request = {
         "id": 100,
         "method": "private/create-order",

@@ -1,16 +1,16 @@
 # The list of coin pairs you want to trade with
 pair_list = [
-    ("ADA", "ADA_USDT"),
-    ("ALGO", "ALGO_USDT"),
-    ("ATOM", "ATOM_USDT"),
-    ("BTC", "BTC_USDT"),
-    ("CRO", "CRO_USDT"),
-    ("DOT", "DOT_USDT"),
-    ("ETH", "ETH_USDT"),
-    ("LTC", "LTC_USDT"),
-    ("SHIB", "SHIB_USDT"),
-    ("XLM", "XLM_USDT"),
-    ("XRP", "XRP_USDT")
+    ("ADA", "ADA_USDT", 1),
+    ("ALGO", "ALGO_USDT", 2),
+    ("ATOM", "ATOM_USDT", 2),
+    ("BTC", "BTC_USDT", 6),
+    ("CRO", "CRO_USDT", 3),
+    ("DOT", "DOT_USDT", 3),
+    ("ETH", "ETH_USDT", 5),
+    ("LTC", "LTC_USDT", 5),
+    ("SHIB", "SHIB_USDT", 0),
+    ("XLM", "XLM_USDT", 1),
+    ("XRP", "XRP_USDT", 1)
 ]
 
 # How much USDT do you want to keep as a reserve
