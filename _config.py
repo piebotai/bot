@@ -8,9 +8,14 @@ pair_list = [
     ("DOT", "DOT_USDT"),
     ("ETH", "ETH_USDT"),
     ("LTC", "LTC_USDT"),
+    ("SHIB", "SHIB_USDT"),
     ("XLM", "XLM_USDT"),
     ("XRP", "XRP_USDT")
 ]
 
-# The percentage of your total portfolio value you would like left as a USDT reserve (between 0 and 80)
-usdt_reserve = 10
+# How much USDT do you want to keep as a reserve
+usdt_reserve = 25
+
+# Sets the minimum and maximum order values, so we don't eat into our USDT balance too quickly
+min_order_value = 0.25
+max_order_value = 0.50

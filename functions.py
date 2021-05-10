@@ -18,14 +18,10 @@ API_SECRET = os.getenv('API_SECRET')
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 
-def buy_order(pair, quantity):
-    print("Buy " + str(quantity) + " of " + pair)
-
-
 # Prints the current time
 def current_time():
     time_data = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
-    print(colored(time_data + ": ", "yellow"), end='')
+    print(colored(time_data + ": ", "yellow"))
 
 
 # Gets the total balance of a coin
@@ -56,6 +52,44 @@ def get_coin_price(pair):
     coin_price = ticker['result']['data']['b']
 
     return coin_price
+
+
+def order_buy(pair, notional):
+    order_buy_request = {
+        "id": 100,
+        "method": "private/create-order",
+        "api_key": API_KEY,
+        "params": {
+            "instrument_name": pair,
+            "side": "BUY",
+            "type": "MARKET",
+            "notional": notional
+        },
+        "nonce": int(time.time() * 1000)
+    }
+
+    order_buy_response = requests.post('https://api.crypto.com/v2/private/create-order',
+                                  headers={'Content-type': 'application/json'},
+                                  data=json.dumps(sign_request(req=order_buy_request)))
+
+
+def order_sell(pair, quantity):
+    order_sell_request = {
+        "id": 100,
+        "method": "private/create-order",
+        "api_key": API_KEY,
+        "params": {
+            "instrument_name": pair,
+            "side": "SELL",
+            "type": "MARKET",
+            "quantity": quantity
+        },
+        "nonce": int(time.time() * 1000)
+    }
+
+    order_sell_response = requests.post('https://api.crypto.com/v2/private/create-order',
+                                       headers={'Content-type': 'application/json'},
+                                       data=json.dumps(sign_request(req=order_sell_request)))
 
 
 def pre_flight_checks():
