@@ -2,20 +2,12 @@ import emoji
 import hashlib
 import hmac
 import json
-import os
 import requests
 import sys
 from termcolor import colored
 import time
 
 from _config import *
-
-# Set environment variables
-from dotenv import load_dotenv
-load_dotenv()
-API_KEY = os.getenv('API_KEY')
-API_SECRET = os.getenv('API_SECRET')
-ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 
 # Prints the current time
@@ -32,7 +24,7 @@ def get_coin_balance(coin):
     coin_balance_request = {
         "id": 100,
         "method": "private/get-account-summary",
-        "api_key": API_KEY,
+        "api_key": api_key,
         "params": {
             "currency": coin
         },
@@ -61,7 +53,7 @@ def order_buy(pair, notional):
     order_buy_request = {
         "id": 100,
         "method": "private/create-order",
-        "api_key": API_KEY,
+        "api_key": api_key,
         "params": {
             "instrument_name": pair,
             "side": "BUY",
@@ -85,7 +77,7 @@ def order_sell(pair, quantity, quantity_precision):
     order_sell_request = {
         "id": 100,
         "method": "private/create-order",
-        "api_key": API_KEY,
+        "api_key": api_key,
         "params": {
             "instrument_name": pair,
             "side": "SELL",
@@ -104,16 +96,20 @@ def pre_flight_checks():
     print(emoji.emojize(':rocket:', use_aliases=True), end=" ")
     print(colored("Performing pre-flight checks", "cyan"))
 
-    # Kill the script if the API key and API secret aren't defined
-    if not API_KEY and API_SECRET:
+    # Checks whether the trading pairs have been defined, and if there is enough to begin trading
+    try:
+        environment
+    except NameError:
         print(emoji.emojize(':x:', use_aliases=True), end=" ")
-        print(colored(".env is missing your API key and secret", "red"))
+        print(colored("Your environment is missing from the config file", "red"))
         sys.exit()
 
-    # Kill the script if no environment has been defined
-    if not ENVIRONMENT:
+    # Checks whether the API key and API secret have been defined
+    try:
+        api_key and api_secret
+    except NameError:
         print(emoji.emojize(':x:', use_aliases=True), end=" ")
-        print(colored(".env is missing a defined environment. This should either be 'production' or 'dev'", "red"))
+        print(colored("Your API key and API secret are missing from the config file", "red"))
         sys.exit()
 
     # Checks whether the trading pairs have been defined, and if there is enough to begin trading
@@ -176,7 +172,7 @@ def pre_flight_checks():
     init_request = {
         "id": 100,
         "method": "private/get-account-summary",
-        "api_key": API_KEY,
+        "api_key": api_key,
         "params": {
             "currency": "USDT"
         },
@@ -211,7 +207,7 @@ def sign_request(req):
     sig_payload = req['method'] + str(req['id']) + req['api_key'] + param_string + str(req['nonce'])
 
     req['sig'] = hmac.new(
-        bytes(str(API_SECRET), 'utf-8'),
+        bytes(str(api_secret), 'utf-8'),
         msg=bytes(sig_payload, 'utf-8'),
         digestmod=hashlib.sha256
     ).hexdigest()

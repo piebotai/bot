@@ -1,3 +1,7 @@
+environment = "dev"
+api_key = "xxx"
+api_secret = "xxx"
+
 # The list of coin pairs you want to trade with
 pair_list = [
     ("ADA", "ADA_USDT", 1),

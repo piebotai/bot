@@ -77,7 +77,7 @@ def piebot(pairs):
                 order_value = max_order_value
 
         if buy_order:
-            if ENVIRONMENT == "production":
+            if environment == "production":
                 order_buy(pair[1], order_value)
 
             print_value = round(order_value, 2)
@@ -86,7 +86,7 @@ def piebot(pairs):
             print(colored("[BUY]", "green"))
 
         elif sell_order:
-            if ENVIRONMENT == "production":
+            if environment == "production":
                 order_sell(pair[1], order_value, pair[2])
 
             print_value = round(difference, 2)
@@ -103,7 +103,7 @@ def piebot(pairs):
     print(colored("Waiting to be called", "cyan"))
 
 
-if ENVIRONMENT == "production":
+if environment == "production":
     print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
     schedule.every().hour.at(":00").do(piebot, pairs=pair_list)
