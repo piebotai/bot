@@ -146,6 +146,32 @@ def pre_flight_checks():
             print(colored("Your USDT reserve must be 80% or lower", "red"))
             sys.exit()
 
+    # Checks whether the minimum order value has been defined and is valid
+    try:
+        min_order_value
+    except NameError:
+        print(emoji.emojize(':x:', use_aliases=True), end=" ")
+        print(colored("Your minimum order value is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if min_order_value < 0.25:
+            print(emoji.emojize(':x:', use_aliases=True), end=" ")
+            print(colored("Your minimum order value must be 0.25 or greater", "red"))
+            sys.exit()
+
+    # Checks whether the maximum order value has been defined and is valid
+    try:
+        max_order_value
+    except NameError:
+        print(emoji.emojize(':x:', use_aliases=True), end=" ")
+        print(colored("Your maximum order value is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if max_order_value < min_order_value:
+            print(emoji.emojize(':x:', use_aliases=True), end=" ")
+            print(colored("Your maximum order value cannot be smaller than your minimum order value", "red"))
+            sys.exit()
+
     # Send a private request to test if the API key and API secret are correct
     init_request = {
         "id": 100,
