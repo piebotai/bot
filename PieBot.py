@@ -20,7 +20,21 @@ def piebot(pairs):
     elif usdt_reserve == 0:
         usdt_balance = usdt_total_balance
 
-    print("USDT balance: " + str(usdt_balance))
+    # Adds up the total balance of all enabled coins and the USDT balance
+    total_balance = usdt_balance
+
+    for pair in pairs:
+        # Gets the total number of coins for this coin pair
+        coin_balance = get_coin_balance(pair[0])
+
+        # Gets the current price for this coin pair
+        coin_price = get_coin_price(pair[1])
+
+        total_balance = total_balance + (coin_balance * coin_price)
+
+    current_time()
+    print(emoji.emojize(':white_check_mark:', use_aliases=True), end=" ")
+    print(colored("Balances collected", "green"))
 
 
 if ENVIRONMENT == "production":

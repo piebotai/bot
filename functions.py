@@ -49,6 +49,15 @@ def get_coin_balance(coin):
     return coin_total_balance
 
 
+# Gets the price of a coin pair
+def get_coin_price(pair):
+    get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
+    ticker = json.loads(get_price_response.content)
+    coin_price = ticker['result']['data']['b']
+
+    return coin_price
+
+
 def pre_flight_checks():
     print(emoji.emojize(':rocket:', use_aliases=True), end=" ")
     print(colored("Performing pre-flight checks", "cyan"))
