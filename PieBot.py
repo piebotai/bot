@@ -103,6 +103,9 @@ def piebot(pairs):
             print(pair[0], end='')
             print(colored(" [SKIP]", "yellow"))
 
+    print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
+    print(colored("Waiting to be called", "cyan"))
+
 
 if ENVIRONMENT == "production":
     print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
