@@ -19,9 +19,12 @@ ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 
 # Prints the current time
-def current_time():
+def current_time(new_line):
     time_data = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime())
-    print(colored(time_data + ": ", "yellow"))
+    if new_line:
+        print(colored(time_data + ": ", "yellow"), end="")
+    else:
+        print(colored(time_data, "yellow"))
 
 
 # Gets the total balance of a coin

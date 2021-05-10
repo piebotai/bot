@@ -8,7 +8,7 @@ pre_flight_checks()
 def piebot(pairs):
     # Let users know the bot has been called and is running
     print()
-    current_time()
+    current_time(False)
     print(emoji.emojize(':mag:', use_aliases=True), end=" ")
     print(colored("Collecting current balances", "cyan"))
 
@@ -38,9 +38,6 @@ def piebot(pairs):
 
     print(emoji.emojize(':white_check_mark:', use_aliases=True), end=" ")
     print(colored("Balances collected", "green"))
-
-    print("Total balance: " + str(total_balance) + " USDT")
-    print("Target per coin: " + str(target_per_coin) + " USDT")
 
     print(emoji.emojize(':money_bag:', use_aliases=True), end=" ")
     print(colored("Placing orders", "cyan"))
@@ -87,7 +84,7 @@ def piebot(pairs):
                 order_buy(pair[1], order_value)
 
             print_value = round(order_value, 2)
-            current_time()
+            current_time(True)
             print(str(print_value) + " USDT - " + pair[0], end='')
             print(colored(" [BUY]", "green"))
 
@@ -98,7 +95,7 @@ def piebot(pairs):
                 order_sell(pair[1], order_value)
 
             print_value = round(difference, 2)
-            current_time()
+            current_time(True)
             print(str(print_value) + " USDT - " + pair[0], end='')
             print(colored(" [SELL]", "magenta"))
 
