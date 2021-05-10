@@ -85,8 +85,8 @@ def piebot(pairs):
 
             print_value = round(order_value, 2)
             current_time(True)
-            print(str(print_value) + " USDT - " + pair[0], end='')
-            print(colored(" [BUY]", "green"))
+            print(str(print_value) + " USDT - " + pair[0], end=" ")
+            print(colored("[BUY]", "green"))
 
         elif sell_order:
             if ENVIRONMENT == "production":
@@ -96,12 +96,13 @@ def piebot(pairs):
 
             print_value = round(difference, 2)
             current_time(True)
-            print(str(print_value) + " USDT - " + pair[0], end='')
-            print(colored(" [SELL]", "magenta"))
+            print(str(print_value) + " USDT - " + pair[0], end=" ")
+            print(colored("[SELL]", "magenta"))
 
         else:
-            print(pair[0], end='')
-            print(colored(" [SKIP]", "yellow"))
+            current_time(True)
+            print(pair[0], end=" ")
+            print(colored("[SKIP]", "yellow"))
 
     print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
