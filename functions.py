@@ -49,6 +49,7 @@ def get_coin_price(pair):
     return coin_price
 
 
+# Submits a buy order
 def order_buy(pair, notional):
     order_buy_request = {
         "id": 100,
@@ -68,6 +69,7 @@ def order_buy(pair, notional):
                                   data=json.dumps(sign_request(req=order_buy_request)))
 
 
+# Submits a sell order
 def order_sell(pair, quantity, quantity_precision):
     if quantity_precision == 0:
         quantity = int(quantity)
@@ -92,6 +94,7 @@ def order_sell(pair, quantity, quantity_precision):
                                        data=json.dumps(sign_request(req=order_sell_request)))
 
 
+# Checks everything is in order before the bot runs
 def pre_flight_checks():
     print(emoji.emojize(':rocket:', use_aliases=True), end=" ")
     print(colored("Performing pre-flight checks", "cyan"))
@@ -196,6 +199,7 @@ def pre_flight_checks():
         sys.exit()
 
 
+# Signs private requests
 def sign_request(req):
     param_string = ''
 
