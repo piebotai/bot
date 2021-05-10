@@ -8,7 +8,6 @@ pre_flight_checks()
 def piebot(pairs):
     # Let users know the bot has been called and is running
     print()
-    current_time(False)
     print(emoji.emojize(':mag:', use_aliases=True), end=" ")
     print(colored("Collecting current balances", "cyan"))
 
