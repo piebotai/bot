@@ -11,17 +11,7 @@ def piebot(pairs):
     print(emoji.emojize(':mag:', use_aliases=True), end=" ")
     print(colored("Collecting current balances", "cyan"))
 
-    # Gets the USDT balance and keeps aside the defined reserves
-    usdt_total_balance = get_coin_balance("USDT")
-
-    if usdt_reserve > 0:
-        usdt_balance = usdt_total_balance - usdt_reserve
-
-    elif usdt_reserve == 0:
-        usdt_balance = usdt_total_balance
-
-    # Adds up the total balance of all enabled coins and the USDT balance
-    total_balance = usdt_balance
+    total_balance = 0
 
     for pair in pairs:
         # Gets the total number of coins for this coin pair
@@ -31,6 +21,14 @@ def piebot(pairs):
         coin_price = get_coin_price(pair[1])
 
         total_balance = total_balance + (coin_balance * coin_price)
+
+    # Get the total balance of USDT and add it to the current collected balance
+    usdt_total_balance = get_coin_balance("USDT")
+    total_balance = total_balance + usdt_total_balance
+
+    # Keeps aside the defined USDT reserves
+    usdt_reserve_value = (total_balance / 100) * (usdt_reserve * 100)
+    total_balance = total_balance - usdt_reserve_value
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_balance / len(pair_list)

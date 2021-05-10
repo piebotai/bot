@@ -14,7 +14,7 @@ pair_list = [
 ]
 
 # How much USDT do you want to keep as a reserve
-usdt_reserve = 25
+usdt_reserve = 0.05
 
 # Sets the minimum and maximum order values, so we don't eat into our USDT balance too quickly
 min_order_value = 0.25
