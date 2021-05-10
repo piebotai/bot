@@ -93,6 +93,8 @@ def piebot(pairs):
 
         elif sell_order:
             if ENVIRONMENT == "production":
+                if pair[0] == "SHIB":
+                    order_value = int(order_value)
                 order_sell(pair[1], order_value)
 
             print_value = round(difference, 2)
