@@ -104,8 +104,6 @@ def pre_flight_checks():
     print(emoji.emojize(':rocket:', use_aliases=True), end=" ")
     print(colored("Performing pre-flight checks", "cyan"))
 
-    time.sleep(1)
-
     # Kill the script if the API key and API secret aren't defined
     if not API_KEY and API_SECRET:
         print(emoji.emojize(':x:', use_aliases=True), end=" ")
