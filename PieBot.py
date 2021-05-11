@@ -93,6 +93,8 @@ def piebot(pairs):
                 print(emoji.emojize(':white_check_mark:', use_aliases=True))
             else:
                 print(emoji.emojize(':x:', use_aliases=True))
+                print(order.status_code, order.reason)
+                print(order.content)
 
         elif sell_order:
             order_confirmed = False
@@ -111,6 +113,8 @@ def piebot(pairs):
                 print(emoji.emojize(':white_check_mark:', use_aliases=True))
             else:
                 print(emoji.emojize(':x:', use_aliases=True))
+                print(order.status_code, order.reason)
+                print(order.content)
 
         else:
             current_time(True)
