@@ -76,6 +76,10 @@ def order_buy(pair, notional):
 def order_sell(pair, quantity, quantity_precision):
     if quantity_precision == 0:
         quantity = int(quantity)
+    elif quantity_precision == 6:
+        quantity = "{:.6f}".format(quantity)
+    elif quantity_precision == 5:
+        quantity = "{:.5f}".format(quantity)
     else:
         quantity = round(quantity, quantity_precision)
 
