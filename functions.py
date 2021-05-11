@@ -68,6 +68,9 @@ def order_buy(pair, notional):
                                   headers={'Content-type': 'application/json'},
                                   data=json.dumps(sign_request(req=order_buy_request)))
 
+    print(order_buy_response.status_code, order_buy_response.reason)
+    print(order_buy_response.content)
+
 
 # Submits a sell order
 def order_sell(pair, quantity, quantity_precision):
@@ -92,6 +95,9 @@ def order_sell(pair, quantity, quantity_precision):
     order_sell_response = requests.post('https://api.crypto.com/v2/private/create-order',
                                        headers={'Content-type': 'application/json'},
                                        data=json.dumps(sign_request(req=order_sell_request)))
+
+    print(order_sell_response.status_code, order_sell_response.reason)
+    print(order_sell_response.content)
 
 
 # Checks everything is in order before the bot runs
