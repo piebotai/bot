@@ -50,7 +50,10 @@ def get_coin_price(pair):
 
 
 # Submits a buy order
-def order_buy(pair, notional):
+def order_buy(pair, notional, price_precision):
+    # Converts the notional into a number with the correct number of decimal places
+    notional = "%0.*f" % (price_precision, notional)
+
     order_buy_request = {
         "id": 100,
         "method": "private/create-order",
