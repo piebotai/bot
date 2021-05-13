@@ -7,8 +7,6 @@ import sys
 from termcolor import colored
 import time
 
-from _config import *
-
 
 # Prints the current time
 def current_time(new_line):

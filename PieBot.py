@@ -1,3 +1,4 @@
+from _config import *
 from lib.functions import *
 import emoji
 import schedule
