@@ -1,4 +1,4 @@
-from functions import *
+from lib.functions import *
 import emoji
 import schedule
 
