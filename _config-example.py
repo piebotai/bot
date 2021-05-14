@@ -12,7 +12,6 @@ pair_list = [
     ("DOT", "DOT_USDT", 4, 3),
     ("ETH", "ETH_USDT", 2, 5),
     ("LTC", "LTC_USDT", 2, 5),
-    ("SHIB", "SHIB_USDT", 9, 0),
     ("XLM", "XLM_USDT", 5, 1),
     ("XRP", "XRP_USDT", 5, 1)
 ]
