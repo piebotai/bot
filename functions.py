@@ -40,6 +40,22 @@ def get_coin_balance(coin):
     return coin_total_balance
 
 
+# Gets the details of a coin pair
+def get_pair_details(pair):
+    def get_instrument(instruments, name):
+        for instrument in instruments:
+            if instrument['instrument_name'] == name:
+                return instrument
+
+    response = requests.get("https://api.crypto.com/v2/public/get-instruments")
+    data = json.loads(response.content)
+    instruments = data['result']['instruments']
+
+    details = get_instrument(instruments, pair)
+
+    return details
+
+
 # Gets the price of a coin pair
 def get_coin_price(pair):
     get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
