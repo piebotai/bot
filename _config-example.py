@@ -16,7 +16,9 @@ pair_list = [
     ("XRP", "XRP_USDT")
 ]
 
-# How much USDT do you want to keep as a reserve
+# How much USDT do you want to keep as a reserve. This is a percentage of the total portfolio balance
+# 0.05 = 5%
+# 0.15 = 15%
 usdt_reserve = 0.05
 
 # Sets the minimum and maximum order values, so we don't eat into our USDT balance too quickly
