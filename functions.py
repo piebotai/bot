@@ -66,7 +66,11 @@ def get_coin_price(pair):
 
 
 # Submits a buy order
-def order_buy(pair, notional, price_precision):
+def order_buy(pair, notional):
+    # Finds the required price precision for this coin pair
+    pair_data = get_pair_details(pair)
+    price_precision = pair_data['price_decimals']
+
     # Converts the notional into a number with the correct number of decimal places
     notional = "%0.*f" % (price_precision, notional)
 
@@ -91,7 +95,11 @@ def order_buy(pair, notional, price_precision):
 
 
 # Submits a sell order
-def order_sell(pair, quantity, quantity_precision):
+def order_sell(pair, quantity):
+    # Finds the required quantity precision for this coin pair
+    pair_data = get_pair_details(pair)
+    quantity_precision = pair_data['quantity_decimals']
+
     # Converts the quantity into a number with the correct number of decimal places
     quantity = "%0.*f" % (quantity_precision, quantity)
 
