@@ -78,44 +78,56 @@ def piebot(pairs):
                 order_value = max_order_value
 
         if buy_order:
-            order_confirmed = False
             if environment == "production":
+                order_confirmed = False
                 order = order_buy(pair[1], order_value, pair[2])
-                time.sleep(0.5)
+                time.sleep(0.25)
                 if order.status_code == 200:
                     order_confirmed = True
 
-            print_value = round(order_value, 2)
-            current_time(True)
-            print(str(print_value) + " USDT - " + pair[0], end=" ")
-            print(colored("[BUY]", "green"), end=" ")
+                print_value = round(order_value, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"), end=" ")
 
-            if order_confirmed:
-                print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                if order_confirmed:
+                    print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                else:
+                    print(emoji.emojize(':x:', use_aliases=True))
+                    print(order.status_code, order.reason)
+                    print(order.content)
+
             else:
-                print(emoji.emojize(':x:', use_aliases=True))
-                print(order.status_code, order.reason)
-                print(order.content)
+                print_value = round(order_value, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"))
 
         elif sell_order:
-            order_confirmed = False
             if environment == "production":
+                order_confirmed = False
                 order = order_sell(pair[1], order_value, pair[3])
-                time.sleep(0.5)
+                time.sleep(0.25)
                 if order.status_code == 200:
                     order_confirmed = True
 
-            print_value = round(difference, 2)
-            current_time(True)
-            print(str(print_value) + " USDT - " + pair[0], end=" ")
-            print(colored("[SELL]", "magenta"), end=" ")
+                print_value = round(difference, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[SELL]", "magenta"), end=" ")
 
-            if order_confirmed:
-                print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                if order_confirmed:
+                    print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                else:
+                    print(emoji.emojize(':x:', use_aliases=True))
+                    print(order.status_code, order.reason)
+                    print(order.content)
+
             else:
-                print(emoji.emojize(':x:', use_aliases=True))
-                print(order.status_code, order.reason)
-                print(order.content)
+                print_value = round(difference, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[SELL]", "magenta"))
 
         else:
             current_time(True)
