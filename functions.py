@@ -40,6 +40,22 @@ def get_coin_balance(coin):
     return coin_total_balance
 
 
+# Gets the details of a coin pair
+def get_pair_details(pair):
+    def get_instrument(instruments, name):
+        for instrument in instruments:
+            if instrument['instrument_name'] == name:
+                return instrument
+
+    response = requests.get("https://api.crypto.com/v2/public/get-instruments")
+    data = json.loads(response.content)
+    instruments = data['result']['instruments']
+
+    details = get_instrument(instruments, pair)
+
+    return details
+
+
 # Gets the price of a coin pair
 def get_coin_price(pair):
     get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
@@ -50,7 +66,11 @@ def get_coin_price(pair):
 
 
 # Submits a buy order
-def order_buy(pair, notional, price_precision):
+def order_buy(pair, notional):
+    # Finds the required price precision for this coin pair
+    pair_data = get_pair_details(pair)
+    price_precision = pair_data['price_decimals']
+
     # Converts the notional into a number with the correct number of decimal places
     notional = "%0.*f" % (price_precision, notional)
 
@@ -75,7 +95,11 @@ def order_buy(pair, notional, price_precision):
 
 
 # Submits a sell order
-def order_sell(pair, quantity, quantity_precision):
+def order_sell(pair, quantity):
+    # Finds the required quantity precision for this coin pair
+    pair_data = get_pair_details(pair)
+    quantity_precision = pair_data['quantity_decimals']
+
     # Converts the quantity into a number with the correct number of decimal places
     quantity = "%0.*f" % (quantity_precision, quantity)
 

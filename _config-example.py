@@ -4,16 +4,16 @@ api_secret = "xxx"
 
 # The list of coin pairs you want to trade with
 pair_list = [
-    ("ADA", "ADA_USDT", 5, 1),
-    ("ALGO", "ALGO_USDT", 4, 2),
-    ("ATOM", "ATOM_USDT", 3, 2),
-    ("BTC", "BTC_USDT", 2, 6),
-    ("CRO", "CRO_USDT", 5, 3),
-    ("DOT", "DOT_USDT", 4, 3),
-    ("ETH", "ETH_USDT", 2, 5),
-    ("LTC", "LTC_USDT", 2, 5),
-    ("XLM", "XLM_USDT", 5, 1),
-    ("XRP", "XRP_USDT", 5, 1)
+    ("ADA", "ADA_USDT"),
+    ("ALGO", "ALGO_USDT"),
+    ("ATOM", "ATOM_USDT"),
+    ("BTC", "BTC_USDT"),
+    ("CRO", "CRO_USDT"),
+    ("DOT", "DOT_USDT"),
+    ("ETH", "ETH_USDT"),
+    ("LTC", "LTC_USDT"),
+    ("XLM", "XLM_USDT"),
+    ("XRP", "XRP_USDT")
 ]
 
 # How much USDT do you want to keep as a reserve

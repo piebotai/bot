@@ -79,7 +79,7 @@ def piebot(pairs):
         if buy_order:
             if environment == "production":
                 order_confirmed = False
-                order = order_buy(pair[1], order_value, pair[2])
+                order = order_buy(pair[1], order_value)
                 time.sleep(0.25)
                 if order.status_code == 200:
                     order_confirmed = True
@@ -105,7 +105,7 @@ def piebot(pairs):
         elif sell_order:
             if environment == "production":
                 order_confirmed = False
-                order = order_sell(pair[1], order_value, pair[3])
+                order = order_sell(pair[1], order_value)
                 time.sleep(0.25)
                 if order.status_code == 200:
                     order_confirmed = True
