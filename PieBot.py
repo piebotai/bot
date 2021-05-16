@@ -1,76 +1,45 @@
-# -*- coding: utf-8 -*-
+from functions import *
+import emoji
+import schedule
 
-# Import required packages
-import os
-import sys
-import asyncio
-import aioschedule as schedule
-import cryptocom.exchange as cro
-from termcolor import colored
-import time
-
-# Set environment variables
-from dotenv import load_dotenv
-load_dotenv()
-API_KEY = os.getenv('API_KEY')
-API_SECRET = os.getenv('API_SECRET')
-ENVIRONMENT = os.getenv('ENVIRONMENT')
-
-# Kill the script if no environment has been defined
-if not ENVIRONMENT:
-    print(colored(".env is missing a defined environment. This should either be 'production' or 'dev'", "red"))
-    sys.exit()
-
-# Let users know the bot has started, and is waiting to be called
-print(colored("Bot started", "green"))
+pre_flight_checks()
 
 
-async def rebalance():
+def piebot(pairs):
     # Let users know the bot has been called and is running
-    t = time.localtime()
-    current_time = time.strftime("%H:%M:%S - %d/%m/%Y", t)
-    print(colored(current_time + ": ", "yellow"), end='')
-    print(colored("Running...", "cyan"))
+    print()
+    print(emoji.emojize(':mag:', use_aliases=True), end=" ")
+    print(colored("Collecting current balances", "cyan"))
 
-    exchange = cro.Exchange()
-    account = cro.Account(api_key=API_KEY, api_secret=API_SECRET)
-    await account.sync_pairs()
-    balances = await account.get_balance()
+    total_balance = 0
 
-    pairs = [
-        ("ADA", "ADA_USDT", 5, 1),
-        ("ALGO", "ALGO_USDT", 4, 2),
-        ("ATOM", "ATOM_USDT", 3, 2),
-        ("BTC", "BTC_USDT", 2, 6),
-        ("CRO", "CRO_USDT", 5, 3),
-        ("DOT", "DOT_USDT", 4, 3),
-        ("ETH", "ETH_USDT", 2, 5),
-        ("LTC", "LTC_USDT", 2, 5),
-        ("XLM", "XLM_USDT", 5, 1),
-        ("XRP", "XRP_USDT", 5, 1)
-    ]
-
-    # Gets the USDT balance and keeps 25 USDT aside
-    usdt_balance = balances[cro.coins.USDT].total - 25
-
-    # Adds up the total balance of all enabled coins and the USDT balance
-    total_balance = usdt_balance
     for pair in pairs:
-        time.sleep(0.5)
-        total_coins = balances[cro.coins.Coin(pair[0])].total
-        coin_price = await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
-        total_balance = total_balance + (total_coins * coin_price)
+        # Gets the total number of coins for this coin pair
+        coin_balance = get_coin_balance(pair[0])
+
+        # Gets the current price for this coin pair
+        coin_price = get_coin_price(pair[1])
+
+        total_balance = total_balance + (coin_balance * coin_price)
+
+    # Get the total balance of USDT and add it to the current collected balance
+    usdt_total_balance = get_coin_balance("USDT")
+    total_balance = total_balance + usdt_total_balance
+
+    # Keeps aside the defined USDT reserves
+    usdt_reserve_value = (total_balance / 100) * (usdt_reserve * 100)
+    total_balance = total_balance - usdt_reserve_value
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
-    target_per_coin = total_balance / len(pairs)
+    target_per_coin = total_balance / len(pair_list)
 
-    # Sets the minimum and maximum order values, so we don't eat into our USDT balance too quickly
-    min_order_value = 0.25
-    max_order_value = 0.50
+    print(emoji.emojize(':white_check_mark:', use_aliases=True), end=" ")
+    print(colored("Balances collected", "green"))
 
-    for pair in pairs:
-        time.sleep(0.5)
+    print(emoji.emojize(':money_bag:', use_aliases=True), end=" ")
+    print(colored("Placing orders", "cyan"))
 
+    for pair in pair_list:
         # Sets null defaults
         buy_order = False
         sell_order = False
@@ -78,79 +47,104 @@ async def rebalance():
         order_value = 0
         pair_value = 0
 
-        # Calculate the USDT value of this coin pair
-        pair_total_coins = balances[cro.coins.Coin(pair[0])].total
-        pair_coin_price = await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
+        # Gets the total number of coins for this coin pair
+        coin_balance = get_coin_balance(pair[0])
 
-        if pair_total_coins and pair_coin_price > 0:
-            pair_value = pair_total_coins * pair_coin_price
+        # Gets the current price for this coin pair
+        coin_price = get_coin_price(pair[1])
 
-        time.sleep(0.5)
+        pair_value = coin_balance * coin_price
 
-        if pair_value > 0:
-            # If the coin pair value is over target, sell the excess if it's greater than the minimum order value
-            if pair_value > target_per_coin:
-                difference = pair_value - target_per_coin
-                if difference >= min_order_value:
-                    sell_order = True
-                    order_value = difference / await exchange.get_price(cro.pairs.Pair(pair[1], 9, 9))
+        # If the coin pair value is over target, sell the excess if it's greater than the minimum order value
+        if pair_value > target_per_coin:
+            difference = pair_value - target_per_coin
+            if difference >= min_order_value:
+                sell_order = True
+                order_value = difference / coin_price
 
-            # If the coin pair value is under target, work out how much we need to buy
-            elif pair_value < target_per_coin:
-                difference = target_per_coin - pair_value
+        # If the coin pair value is under target, work out how much we need to buy
+        elif pair_value < target_per_coin:
+            difference = target_per_coin - pair_value
 
-                # If the difference is between min_order_value and max_order_value (inclusive), set the difference as the order value
-                if min_order_value <= difference <= max_order_value:
-                    buy_order = True
-                    order_value = difference
+            # If the difference is between min_order_value and max_order_value (inclusive), set the difference as the order value
+            if min_order_value <= difference <= max_order_value:
+                buy_order = True
+                order_value = difference
 
-                # If the difference is greater than max_order_value, set the order value as max_order_value
-                elif difference > max_order_value:
-                    buy_order = True
-                    order_value = max_order_value
+            # If the difference is greater than max_order_value, set the order value as max_order_value
+            elif difference > max_order_value:
+                buy_order = True
+                order_value = max_order_value
 
-            time.sleep(0.5)
+        if buy_order:
+            if environment == "production":
+                order_confirmed = False
+                order = order_buy(pair[1], order_value)
+                time.sleep(0.25)
+                if order.status_code == 200:
+                    order_confirmed = True
 
-            # Submit a buy order if necessary
-            if buy_order:
-                if ENVIRONMENT == "production":
-                    await account.buy_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
                 print_value = round(order_value, 2)
-                print(colored(current_time + ": ", "yellow"), end='')
-                print(str(print_value) + " USDT - " + pair[0], end='')
-                print(colored(" [BUY]", "green"))
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"), end=" ")
 
-            # Submit a sell order if necessary
-            elif sell_order:
-                if ENVIRONMENT == "production":
-                    await account.sell_market(cro.pairs.Pair(pair[1], pair[2], pair[3]), order_value)
-                print_value = round(difference, 2)
-                print(colored(current_time + ": ", "yellow"), end='')
-                print(str(print_value) + " USDT - " + pair[0], end='')
-                print(colored(" [SELL]", "magenta"))
+                if order_confirmed:
+                    print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                else:
+                    print(emoji.emojize(':x:', use_aliases=True))
+                    print(order.status_code, order.reason)
+                    print(order.content)
 
-            # Neither a buy or sell order was required this time, so print a user friendly message
             else:
-                print(colored(current_time + ": ", "yellow"), end='')
-                print(pair[0], end='')
-                print(colored(" [SKIP]", "yellow"))
+                print_value = round(order_value, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"))
+
+        elif sell_order:
+            if environment == "production":
+                order_confirmed = False
+                order = order_sell(pair[1], order_value)
+                time.sleep(0.25)
+                if order.status_code == 200:
+                    order_confirmed = True
+
+                print_value = round(difference, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[SELL]", "magenta"), end=" ")
+
+                if order_confirmed:
+                    print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                else:
+                    print(emoji.emojize(':x:', use_aliases=True))
+                    print(order.status_code, order.reason)
+                    print(order.content)
+
+            else:
+                print_value = round(difference, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[SELL]", "magenta"))
 
         else:
-            print(colored(current_time + ": ", "yellow"), end='')
-            print(pair[0], end='')
-            print(colored(" [SKIP]", "yellow"))
-            pass
+            current_time(True)
+            print(pair[0], end=" ")
+            print(colored("[SKIP]", "yellow"))
 
-    print(colored("Waiting...", "cyan"))
+    print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
+    print(colored("Waiting to be called", "cyan"))
 
-if ENVIRONMENT == "production":
-    schedule.every().hour.at(":00").do(rebalance)
 
-    loop = asyncio.get_event_loop()
+if environment == "production":
+    print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
+    print(colored("Waiting to be called", "cyan"))
+    schedule.every().hour.at(":00").do(piebot, pairs=pair_list)
 
     while True:
-        loop.run_until_complete(schedule.run_pending())
+        schedule.run_pending()
         time.sleep(1)
 
 else:
-    asyncio.run(rebalance())
+    piebot(pairs=pair_list)

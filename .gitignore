@@ -10,3 +10,4 @@ venv
 # Project
 .env
 tests
+_config.py
