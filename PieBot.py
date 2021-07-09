@@ -31,7 +31,7 @@ def piebot(pairs):
     total_balance = total_balance - usdt_reserve_value
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
-    target_per_coin = total_balance / len(pair_list)
+    target_per_coin = total_balance / len(pairs)
 
     print(emoji.emojize(':white_check_mark:', use_aliases=True), end=" ")
     print(colored("Balances collected", "green"))
@@ -39,7 +39,7 @@ def piebot(pairs):
     print(emoji.emojize(':money_bag:', use_aliases=True), end=" ")
     print(colored("Placing orders", "cyan"))
 
-    for pair in pair_list:
+    for pair in pairs:
         # Sets null defaults
         buy_order = False
         sell_order = False
