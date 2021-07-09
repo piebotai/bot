@@ -8,7 +8,7 @@ pre_flight_checks()
 def piebot(pairs):
     # Let users know the bot has been called and is running
     print()
-    print(emoji.emojize(':mag:', use_aliases=True), end=" ")
+    print(emoji.emojize(":mag:", use_aliases=True), end=" ")
     print(colored("Collecting current balances", "cyan"))
 
     total_balance = 0
@@ -33,10 +33,10 @@ def piebot(pairs):
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_balance / len(pairs)
 
-    print(emoji.emojize(':white_check_mark:', use_aliases=True), end=" ")
+    print(emoji.emojize(":white_check_mark:", use_aliases=True), end=" ")
     print(colored("Balances collected", "green"))
 
-    print(emoji.emojize(':money_bag:', use_aliases=True), end=" ")
+    print(emoji.emojize(":money_bag:", use_aliases=True), end=" ")
     print(colored("Placing orders", "cyan"))
 
     for pair in pairs:
@@ -90,9 +90,9 @@ def piebot(pairs):
                 print(colored("[BUY]", "green"), end=" ")
 
                 if order_confirmed:
-                    print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                    print(emoji.emojize(":white_check_mark:", use_aliases=True))
                 else:
-                    print(emoji.emojize(':x:', use_aliases=True))
+                    print(emoji.emojize(":x:", use_aliases=True))
                     print(order.status_code, order.reason)
                     print(order.content)
 
@@ -116,9 +116,9 @@ def piebot(pairs):
                 print(colored("[SELL]", "magenta"), end=" ")
 
                 if order_confirmed:
-                    print(emoji.emojize(':white_check_mark:', use_aliases=True))
+                    print(emoji.emojize(":white_check_mark:", use_aliases=True))
                 else:
-                    print(emoji.emojize(':x:', use_aliases=True))
+                    print(emoji.emojize(":x:", use_aliases=True))
                     print(order.status_code, order.reason)
                     print(order.content)
 
@@ -133,12 +133,12 @@ def piebot(pairs):
             print(pair[0], end=" ")
             print(colored("[SKIP]", "yellow"))
 
-    print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
+    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
 
 
 if environment == "production":
-    print(emoji.emojize(':hourglass:', use_aliases=True), end=" ")
+    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
     schedule.every().hour.at(":00").do(piebot, pairs=pair_list)
 
