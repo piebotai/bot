@@ -128,7 +128,7 @@ def pre_flight_checks():
     print(emoji.emojize(':rocket:', use_aliases=True), end=" ")
     print(colored("Performing pre-flight checks", "cyan"))
 
-    # Checks whether the trading pairs have been defined, and if there is enough to begin trading
+    # Checks whether the environment has been defined
     try:
         environment
     except NameError:
