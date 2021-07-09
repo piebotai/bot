@@ -35,7 +35,7 @@ def get_coin_balance(coin):
                                           headers={'Content-type': 'application/json'},
                                           data=json.dumps(sign_request(req=coin_balance_request)))
     coin_balance_data = json.loads(coin_balance_response.content)
-    coin_total_balance = coin_balance_data['result']['accounts'][0]['balance']
+    coin_total_balance = coin_balance_data['result']['accounts'][0]['available']
 
     return coin_total_balance
 
