@@ -1,4 +1,4 @@
-environment = "dev"
+environment = "production"
 api_key = "xxx"
 api_secret = "xxx"
 
