@@ -16,6 +16,10 @@ pair_list = [
     ("XRP", "XRP_USDT")
 ]
 
+# Sets after how many hours each task should repeat
+buy_frequency = 4
+rebalance_frequency = 1
+
 # How much USDT do you want to keep as a reserve. This is a percentage of the total portfolio balance
 # 0.05 = 5%
 # 0.15 = 15%

@@ -181,8 +181,8 @@ if environment == "production":
     print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
 
-    schedule.every(1).hours.at(":00").do(rebalance, pairs=pair_list)
-    schedule.every(4).hours.at(":30").do(buy, pairs=pair_list)
+    schedule.every(rebalance_frequency).hours.at(":00").do(rebalance, pairs=pair_list)
+    schedule.every(buy_frequency).hours.at(":30").do(buy, pairs=pair_list)
 
     while True:
         schedule.run_pending()

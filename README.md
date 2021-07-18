@@ -143,6 +143,18 @@ A comma separated list of the coin pairs you want PieBot to trade. For example, 
 
 You will need to define both the token you want to trade, and the whole coin pair, just like above.
 
+#### buy_frequency
+
+Set after how many hours the **Buy** task should repeat.
+
+**Default value** - `4`
+
+#### rebalance_frequency
+
+Set after how many hours the **Rebalance** task should repeat.
+
+**Default value** - `1`
+
 #### usdt_reserve
 
 This value tells PieBot how much USDT it should keep aside to not trade with. The value reflects a percentage, and should be between `0` and `1`.
