@@ -56,6 +56,9 @@ def buy(pairs):
         print(emoji.emojize(":money_with_wings:", use_aliases=True), end=" ")
         print(colored("Not enough USDT available", "yellow"))
 
+    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
+    print(colored("Waiting to be called", "cyan"))
+
 
 # Rebalance all coin pairs so they are on target
 def rebalance(pairs):
@@ -175,8 +178,16 @@ def rebalance(pairs):
 
 
 if environment == "production":
-    print("Production")
+    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
+    print(colored("Waiting to be called", "cyan"))
+
+    schedule.every(1).hours.at(":00").do(rebalance, pairs=pair_list)
+    schedule.every(4).hours.at(":30").do(buy, pairs=pair_list)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 else:
-    rebalance(pairs=pair_list)
+    buy(pairs=pair_list)
     # rebalance(pairs=pair_list)
