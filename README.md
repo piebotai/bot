@@ -127,6 +127,16 @@ pm2 start PieBot.py --name PieBot --interpreter=python3 --time
 
 ### Updating
 
+PieBot updates are pushed directly to this Git repository, so a simple `git pull` on the `main` branch is normally all that is required to run the latest version of the bot.
+
+Ensure you have stopped PieBot before updating it, and restart it again once you have updated.
+
+```
+git reset HEAD --hard
+git checkout main
+git pull origin main
+```
+
 ## Disclaimer
 
 This bot is built for private use only. Whilst you are free to use the bot for your own trading purposes, by doing so you acknowledge that its owners, developers, and/or anyone involved with the project is not responsible for any damages or losses as a result.
