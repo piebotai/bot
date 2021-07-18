@@ -19,6 +19,16 @@ def current_time(new_line):
         print(colored(time_data, "yellow"))
 
 
+# Gets the total available value of the portfolio
+def get_available_portfolio_value(value):
+    # Keeps aside the defined USDT reserves
+    usdt_reserve_value = (value / 100) * (usdt_reserve * 100)
+
+    total_available_balance = value - usdt_reserve_value
+
+    return total_available_balance
+
+
 # Gets the total balance of a coin
 def get_coin_balance(coin):
     coin_balance_request = {
