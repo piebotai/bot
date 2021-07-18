@@ -1,4 +1,4 @@
-PieBot is an automated cryptocurrency trading bot, built with Python.
+PieBot is an automated cryptocurrency trading bot, built with Python, for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
 
 ## Requirements
 - [Git](https://git-scm.com/download) `2.x`
