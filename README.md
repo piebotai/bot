@@ -2,6 +2,9 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
 
 ## Table of Contents
 
+- [How It Works](#how-it-works)
+  - [Example](#example)
+  - [Regular Deposits](#regular-deposits)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -10,6 +13,68 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
     - [Updating](#updating)
 - [Disclaimer](#disclaimer)
 - [Donate](#donate)
+
+## How It Works
+
+PieBot is a very simple Dollar Cost Averaging (DCA) bot for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
+
+PieBot is designed to purchase small amounts of your enabled crypto pairs at regular intervals, and also aims to keep your coin pairs the same value by selling over-performers, and buying more of the under-performers.
+
+Simply put, imagine your portfolio as a pie chart. Each slice of the pie represents a cryptocurrency. PieBot aims to keep all slices the same size. Hence PieBot!
+
+### Example
+
+For this example, lets assume you have a portfolio value of **£1,000**, are using **5** coin pairs, and have a **5%** USDT reserve.
+
+Each coin pair would have a designated target, calculated as such:
+
+```
+(portfolio value - usdt reserve) / number of coin pairs
+```
+
+Using the example figures above, we can see that in this case, each coin pair would have a target of £190:
+
+```
+(1000 - 5%) / 5
+
+950 / 5
+
+190
+```
+
+Now, lets assume this is the value of your holdings just before PieBot is called:
+
+```
+ATOM - £191.25  
+ALGO - £187.03
+BTC - £189.29
+CRO - £193.98
+ETH - £188.45
+```
+
+At the time of being called, each coin pair has a target value of £190, as we calculated previously. But we can see that come coins are over target, and some are under target:
+
+```
+ATOM - £191.25 (+£1.25)  
+ALGO - £187.03 (-£2.97)
+BTC - £189.29 (-£0.71)
+CRO - £193.98 (+£3.98)
+ETH - £188.45 (-£1.55)
+```
+
+We can see that `ATOM` and `CRO` have performed well since PieBot was last run. The prices of these coins has increased by a greater rate than the rest of the coins in the portfolio, resulting in those coins being over target.
+
+On the other hand, we can see that `ALGO`, `BTC`, and `ETH` have not performed so well, and these coins are under target.
+
+PieBot will now sell the excess profits for `ATOM` and `CRO`, and use that profit to bring `ALGO`, `BTC`, and `ETH` back on target, but only to the maximum buy order value you have set in `_config.py`.
+
+It is a really simple yet effective trading strategy, designed for holding onto crypto for the long term.
+
+### Regular Deposits
+
+A good strategy would be to add more USDT to PieBot on a regular basis, for example every week.
+
+This ensures the bot has enough time to buy more coins using the new money, and have some time to keep the portfolio balanced before the next deposit.
 
 ## Requirements
 - [Git](https://git-scm.com/download) `2.x`
@@ -103,7 +168,7 @@ _*Price correct at time of writing_
 
 #### max_order_value
 
-The maximum **buy** value an order should be for PieBot to execute it. PieBot has no upper limit for rebalance orders, but it does adhere to `min_order_value`.
+The maximum **buy** value an order should be for PieBot to execute it. PieBot has no upper limit when selling to rebalance orders.
 
 **Default value** - `0.50`
 
