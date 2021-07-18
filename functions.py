@@ -40,6 +40,15 @@ def get_coin_balance(coin):
     return coin_total_balance
 
 
+# Gets the price of a coin pair
+def get_coin_price(pair):
+    get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
+    ticker = json.loads(get_price_response.content)
+    coin_price = ticker["result"]["data"]["b"]
+
+    return coin_price
+
+
 # Gets the details of a coin pair
 def get_pair_details(pair):
     def get_instrument(instruments, name):
@@ -54,15 +63,6 @@ def get_pair_details(pair):
     details = get_instrument(instruments, pair)
 
     return details
-
-
-# Gets the price of a coin pair
-def get_coin_price(pair):
-    get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
-    ticker = json.loads(get_price_response.content)
-    coin_price = ticker["result"]["data"]["b"]
-
-    return coin_price
 
 
 # Submits a buy order
