@@ -65,6 +65,27 @@ def get_pair_details(pair):
     return details
 
 
+# Gets the total value of the portfolio
+def get_portfolio_value(pairs):
+    total_balance = 0
+
+    for pair in pairs:
+        # Gets the total number of coins for this coin pair
+        coin_balance = get_coin_balance(pair[0])
+
+        # Gets the current price for this coin pair
+        coin_price = get_coin_price(pair[1])
+
+        total_balance = total_balance + (coin_balance * coin_price)
+
+    # Get the total balance of USDT and add it to the current collected balance
+    usdt_total_balance = get_coin_balance("USDT")
+
+    total_balance = total_balance + usdt_total_balance
+
+    return total_balance
+
+
 # Submits a buy order
 def order_buy(pair, notional):
     # Finds the required price precision for this coin pair
