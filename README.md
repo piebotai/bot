@@ -1,5 +1,16 @@
 PieBot is an automated cryptocurrency trading bot, built with Python, for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
 
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Config File](#config-file)
+    - [Operation](#operation)
+    - [Updating](#updating)
+- [Disclaimer](#disclaimer)
+- [Donate](#donate)
+
 ## Requirements
 - [Git](https://git-scm.com/download) `2.x`
 - [Python](https://www.python.org/downloads) `3.9`
@@ -7,8 +18,7 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
 
 ## Installation
 
-### Setup
-Run these commands to get PieBot's code, and to prepare your environment for setup:
+Run these commands to get PieBot's code, and to prepare your environment for setup and usage:
 
 ```
 git clone https://github.com/piebotai/bot.git PieBot
@@ -25,6 +35,8 @@ pip3 install emoji
 pip3 install schedule
 pip3 install termcolor
 ```
+
+## Usage
 
 ### Config File
 
@@ -94,6 +106,10 @@ _*Price correct at time of writing_
 The maximum **buy** value an order should be for PieBot to execute it. PieBot has no upper limit for rebalance orders, but it does adhere to `min_order_value`.
 
 **Default value** - `0.50`
+
+### Operation
+
+### Updating
 
 ## Disclaimer
 
