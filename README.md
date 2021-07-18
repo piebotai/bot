@@ -1,8 +1,9 @@
 PieBot is an automated cryptocurrency trading bot, built with Python.
 
 ## Requirements
-- Python `3.9`
-- Pip `21`
+- [Git](https://git-scm.com/download) `2.x`
+- [Python](https://www.python.org/downloads) `3.9`
+- [Pip](https://pypi.org/project/pip) `21.x`
 
 ## Installation
 
