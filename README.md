@@ -210,7 +210,7 @@ The trading strategy used in this bot is experimental and is constantly changing
 
 Please only invest money you are prepared to lose. Prices go up as well as down, and you may get back less than you put in.
 
-## Donate
+## Donate 🥧
 
 If you love PieBot as much as I do, please consider sending a small donation to keep the project going:
 
