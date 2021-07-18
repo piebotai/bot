@@ -178,11 +178,17 @@ The minimum value an order should be for PieBot to execute it.
 
 _*Price correct at time of writing_
 
-#### max_order_value
+#### max_buy_order_value
 
-The maximum **buy** value an order should be for PieBot to execute it. PieBot has no upper limit when selling to rebalance orders.
+The maximum buy value an order should be in the **Buy** task for PieBot to execute it.
 
 **Default value** - `0.50`
+
+#### max_rebalance_order_value
+
+The maximum buy value an order should be in the **Rebalance** task for PieBot to execute it. PieBot has no upper limit when selling to rebalance orders.
+
+**Default value** - `0.25`
 
 ### Operation
 

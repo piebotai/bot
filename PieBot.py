@@ -18,14 +18,14 @@ def buy(pairs):
 
     total_usdt_value = get_coin_balance("USDT")
     total_usdt_available = total_usdt_value - total_usdt_reserve
-    required_usdt = max_order_value * len(pairs)
+    required_usdt = max_buy_order_value * len(pairs)
 
     if required_usdt <= total_usdt_available:
         print(emoji.emojize(":money_bag:", use_aliases=True), end=" ")
         print(colored("Placing orders", "cyan"))
 
         for pair in pairs:
-            order_value = max_order_value
+            order_value = max_buy_order_value
 
             if environment == "production":
                 order_confirmed = False
@@ -106,15 +106,15 @@ def rebalance(pairs):
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
-            # If the difference is between min_order_value and max_order_value (inclusive), set the difference as the order value
-            if min_order_value <= difference <= max_order_value:
+            # If the difference is between min_order_value and max_rebalance_order_value (inclusive), set the difference as the order value
+            if min_order_value <= difference <= max_rebalance_order_value:
                 buy_order = True
                 order_value = difference
 
-            # If the difference is greater than max_order_value, set the order value as max_order_value
-            elif difference > max_order_value:
+            # If the difference is greater than max_rebalance_order_value, set the order value as max_rebalance_order_value
+            elif difference > max_rebalance_order_value:
                 buy_order = True
-                order_value = max_order_value
+                order_value = max_rebalance_order_value
 
         if buy_order:
             if environment == "production":
