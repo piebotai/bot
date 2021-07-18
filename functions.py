@@ -76,7 +76,7 @@ def get_pair_details(pair):
 
 
 # Gets the total value of the portfolio
-def get_portfolio_value(pairs):
+def get_portfolio_value(pairs, include_usdt):
     total_balance = 0
 
     for pair in pairs:
@@ -88,10 +88,11 @@ def get_portfolio_value(pairs):
 
         total_balance = total_balance + (coin_balance * coin_price)
 
-    # Get the total balance of USDT and add it to the current collected balance
-    usdt_total_balance = get_coin_balance("USDT")
+    if include_usdt:
+        # Get the total balance of USDT and add it to the current collected balance
+        usdt_total_balance = get_coin_balance("USDT")
 
-    total_balance = total_balance + usdt_total_balance
+        total_balance = total_balance + usdt_total_balance
 
     return total_balance
 
