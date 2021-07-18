@@ -47,6 +47,8 @@ This can be one of two options:
 - `production` - Real trades with real money
 - `dev` - PieBot's logic runs, but no real trades are submitted
 
+**Default value** - `production`
+
 #### api_key
 
 The API key for your Crypto.com Exchange account
@@ -71,6 +73,8 @@ For example, 5% = `0.05`, 15% = `0.15` etc.
 
 **It is strongly recommended that you don't set this value as 0.** It's a good idea to leave some USDT in reserve, so PieBot has some equity available should it need it.
 
+**Default value** - `0.05`
+
 #### min_order_value
 
 The minimum value an order should be for PieBot to execute it.
@@ -80,11 +84,15 @@ The minimum value an order should be for PieBot to execute it.
 - Firstly, due to the nature of quantity and price decimal points, some coins have a much larger minimum order value that others. For exmaple, `ATOM` only has 2 decimal places for quantity, so `0.01` (the smallest amount) of `ATOM` works out at `0.133 USDT`*
 - Secondly, it prevents situations where the bot might want to rebalance a coin pair if it's `0.01 USDT` over target, which is not an efficent use of trading fees
 
+**Default value** - `0.25`
+
 _*Price correct at time of writing_
 
 #### max_order_value
 
 The maximum **buy** value an order should be for PieBot to execute it. PieBot has no upper limit for rebalance orders, but it does adhere to `min_order_value`.
+
+**Default value** - `0.50`
 
 ## Disclaimer
 
