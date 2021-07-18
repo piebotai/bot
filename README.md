@@ -101,3 +101,13 @@ This bot is built for private use only. Whilst you are free to use the bot for y
 The trading strategy used in this bot is experimental and is constantly changing.
 
 Please only invest money you are prepared to lose. Prices go up as well as down, and you may get back less than you put in.
+
+## Donate
+
+If you love PieBot as much as I do, please consider sending a small donation to keep the project going:
+
+```
+CRO - cro159uyrxk7zqjrd6e3zhsljhqt553nv2p75x8q2c
+XLM - GDFN6UFSQ5Q7IZCN3FVI6VEV2SEVZ7TONSY4TSLOCYIKUOAB2KB7I4CI
+XRP - rJT1ZwBqgRmZQbPUD3ppfUWwpmxPd77BW1
+```
