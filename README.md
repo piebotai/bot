@@ -18,7 +18,7 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
 
 PieBot is a very simple Dollar Cost Averaging (DCA) bot for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
 
-PieBot is designed to purchase small amounts of your enabled crypto pairs at regular intervals, and also aims to keep your coin pairs the same value by selling over-performers, and buying more of the under-performers.
+PieBot is designed to purchase small amounts of your enabled cryptocurrencies at regular intervals, and also aims to keep your holdings the same value by selling over-performers, and buying more of the under-performers.
 
 Simply put, imagine your portfolio as a pie chart. Each slice of the pie represents a cryptocurrency. PieBot aims to keep all slices the same size. Hence PieBot!
 
@@ -34,9 +34,11 @@ If there is not enough USDT to complete the whole order, PieBot will skip the ta
 
 ### Rebalance
 
-The Rebalance task tries to keep all the values of your enabled coin pairs the same, by selling coins that values are over the average, and using those profits to buy more of the coins that are below the average.
+The Rebalance task tries to keep all the values of your holdings the same, by selling coins whose values are over the average, and using those profits to buy more of the coins that are below the average.
 
 The maximum value PieBot buys for each coin is set in the `_config.py` file using the `max_rebalance_order_value` environment variable. This can be adjusted to meet the needs of your strategy, as well as the frequency at which this task runs, using the `rebalance_frequency` environment variable.
+
+PieBot has no maximum order value for selling a holding to bring it back on target, to ensure as much profit is secured as possible.
 
 ## Requirements
 - [Git](https://git-scm.com/download) `2.x`
@@ -135,10 +137,10 @@ The minimum value an order should be for PieBot to execute it.
 
 - Firstly, due to the nature of quantity and price decimal points, some coins have a much larger minimum order value than others. For exmaple, `ATOM` only has 2 decimal places for quantity, so `0.01` (the smallest amount) of `ATOM` works out at `0.133 USDT`*
 - Secondly, it prevents situations where the bot might want to rebalance a coin pair if it's `0.01 USDT` over target, which is not an efficent use of trading fees
+  
+_*Price correct at time of writing_
 
 **Default value** - `0.25`
-
-_*Price correct at time of writing_
 
 #### max_buy_order_value
 
