@@ -111,7 +111,7 @@ You will need to define both the token you want to trade, and the whole coin pai
 
 Set after how many hours the **Buy** task should repeat.
 
-**Default value** - `4`
+**Default value** - `8`
 
 #### rebalance_frequency
 

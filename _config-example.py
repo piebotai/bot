@@ -17,7 +17,7 @@ pair_list = [
 ]
 
 # Sets after how many hours each task should repeat
-buy_frequency = 4
+buy_frequency = 8
 rebalance_frequency = 1
 
 # How much USDT do you want to keep as a reserve. This is a percentage of the total portfolio balance
