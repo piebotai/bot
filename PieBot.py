@@ -5,33 +5,73 @@ import schedule
 pre_flight_checks()
 
 
-def piebot(pairs):
+# Buy more coins at a regular interval
+def buy(pairs):
     # Let users know the bot has been called and is running
     print()
+    print(colored("Buy", "yellow"))
+    print(emoji.emojize(":mag:", use_aliases=True), end=" ")
+    print(colored("Checking if there is enough USDT available", "cyan"))
+
+    total_portfolio_value = get_portfolio_value(pairs, True)
+    total_usdt_reserve = (total_portfolio_value / 100) * (usdt_reserve * 100)
+
+    total_usdt_value = get_coin_balance("USDT")
+    total_usdt_available = total_usdt_value - total_usdt_reserve
+    required_usdt = max_buy_order_value * len(pairs)
+
+    if required_usdt <= total_usdt_available:
+        print(emoji.emojize(":money_bag:", use_aliases=True), end=" ")
+        print(colored("Placing orders", "cyan"))
+
+        for pair in pairs:
+            order_value = max_buy_order_value
+
+            if environment == "production":
+                order_confirmed = False
+                order = order_buy(pair[1], order_value)
+                time.sleep(0.1)
+                if order.status_code == 200:
+                    order_confirmed = True
+
+                print_value = round(order_value, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"), end=" ")
+
+                if order_confirmed:
+                    print(emoji.emojize(":white_check_mark:", use_aliases=True))
+                else:
+                    print(emoji.emojize(":x:", use_aliases=True))
+                    print(order.status_code, order.reason)
+                    print(order.content)
+
+            else:
+                print_value = round(order_value, 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"))
+
+    else:
+        print(emoji.emojize(":money_with_wings:", use_aliases=True), end=" ")
+        print(colored("Not enough USDT available", "yellow"))
+
+    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
+    print(colored("Waiting to be called", "cyan"))
+
+
+# Rebalance all coin pairs so they are on target
+def rebalance(pairs):
+    # Let users know the bot has been called and is running
+    print()
+    print(colored("Rebalance", "yellow"))
     print(emoji.emojize(":mag:", use_aliases=True), end=" ")
     print(colored("Collecting current balances", "cyan"))
 
-    total_balance = 0
-
-    for pair in pairs:
-        # Gets the total number of coins for this coin pair
-        coin_balance = get_coin_balance(pair[0])
-
-        # Gets the current price for this coin pair
-        coin_price = get_coin_price(pair[1])
-
-        total_balance = total_balance + (coin_balance * coin_price)
-
-    # Get the total balance of USDT and add it to the current collected balance
-    usdt_total_balance = get_coin_balance("USDT")
-    total_balance = total_balance + usdt_total_balance
-
-    # Keeps aside the defined USDT reserves
-    usdt_reserve_value = (total_balance / 100) * (usdt_reserve * 100)
-    total_balance = total_balance - usdt_reserve_value
+    total_portfolio_value = get_portfolio_value(pairs, False)
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
-    target_per_coin = total_balance / len(pairs)
+    target_per_coin = total_portfolio_value / len(pairs)
 
     print(emoji.emojize(":white_check_mark:", use_aliases=True), end=" ")
     print(colored("Balances collected", "green"))
@@ -66,15 +106,15 @@ def piebot(pairs):
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
-            # If the difference is between min_order_value and max_order_value (inclusive), set the difference as the order value
-            if min_order_value <= difference <= max_order_value:
+            # If the difference is between min_order_value and max_rebalance_order_value (inclusive), set the difference as the order value
+            if min_order_value <= difference <= max_rebalance_order_value:
                 buy_order = True
                 order_value = difference
 
-            # If the difference is greater than max_order_value, set the order value as max_order_value
-            elif difference > max_order_value:
+            # If the difference is greater than max_rebalance_order_value, set the order value as max_rebalance_order_value
+            elif difference > max_rebalance_order_value:
                 buy_order = True
-                order_value = max_order_value
+                order_value = max_rebalance_order_value
 
         if buy_order:
             if environment == "production":
@@ -140,11 +180,14 @@ def piebot(pairs):
 if environment == "production":
     print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
-    schedule.every().hour.at(":00").do(piebot, pairs=pair_list)
+
+    schedule.every(rebalance_frequency).hours.at(":00").do(rebalance, pairs=pair_list)
+    schedule.every(buy_frequency).hours.at(":30").do(buy, pairs=pair_list)
 
     while True:
         schedule.run_pending()
         time.sleep(1)
 
 else:
-    piebot(pairs=pair_list)
+    buy(pairs=pair_list)
+    # rebalance(pairs=pair_list)

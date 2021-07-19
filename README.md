@@ -18,63 +18,27 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
 
 PieBot is a very simple Dollar Cost Averaging (DCA) bot for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
 
-PieBot is designed to purchase small amounts of your enabled crypto pairs at regular intervals, and also aims to keep your coin pairs the same value by selling over-performers, and buying more of the under-performers.
+PieBot is designed to purchase small amounts of your enabled cryptocurrencies at regular intervals, and also aims to keep your holdings the same value by selling over-performers, and buying more of the under-performers.
 
 Simply put, imagine your portfolio as a pie chart. Each slice of the pie represents a cryptocurrency. PieBot aims to keep all slices the same size. Hence PieBot!
 
-### Example
+PieBot achieves this by running two tasks at different intervals:
 
-For this example, lets assume you have a portfolio value of **£1,000**, are using **5** coin pairs, and have a **5%** USDT reserve.
+### Buy
 
-Each coin pair would have a designated target, calculated as such:
+The Buy task simply buys a set amount of each of your enabled coins.
 
-```
-(portfolio value - usdt reserve) / number of coin pairs
-```
+The value PieBot buys for each coin is set in the `_config.py` file using the `max_buy_order_value` environment variable. This can be adjusted to meet the needs of your strategy, as well as the frequency at which this task runs, using the `buy_frequency` environment variable.
 
-Using the example figures above, we can see that in this case, each coin pair would have a target of £190:
+If there is not enough USDT to complete the whole order, PieBot will skip the task and wait until it is called again.
 
-```
-(1000 - 5%) / 5
+### Rebalance
 
-950 / 5
+The Rebalance task tries to keep all the values of your holdings the same, by selling coins whose values are over the average, and using those profits to buy more of the coins that are below the average.
 
-190
-```
+The maximum value PieBot buys for each coin is set in the `_config.py` file using the `max_rebalance_order_value` environment variable. This can be adjusted to meet the needs of your strategy, as well as the frequency at which this task runs, using the `rebalance_frequency` environment variable.
 
-Now, lets assume this is the value of your holdings just before PieBot is called:
-
-```
-ATOM - £191.25  
-ALGO - £187.03
-BTC - £189.29
-CRO - £193.98
-ETH - £188.45
-```
-
-At the time of being called, each coin pair has a target value of £190, as we calculated previously. But we can see that come coins are over target, and some are under target:
-
-```
-ATOM - £191.25 (+£1.25)  
-ALGO - £187.03 (-£2.97)
-BTC - £189.29 (-£0.71)
-CRO - £193.98 (+£3.98)
-ETH - £188.45 (-£1.55)
-```
-
-We can see that `ATOM` and `CRO` have performed well since PieBot was last run. The prices of these coins has increased by a greater rate than the rest of the coins in the portfolio, resulting in those coins being over target.
-
-On the other hand, we can see that `ALGO`, `BTC`, and `ETH` have not performed so well, and these coins are under target.
-
-PieBot will now sell the excess profits for `ATOM` and `CRO`, and use that profit to bring `ALGO`, `BTC`, and `ETH` back on target, but only to the maximum buy order value you have set in `_config.py`.
-
-It is a really simple yet effective trading strategy, designed for holding onto crypto for the long term.
-
-### Regular Deposits
-
-A good strategy would be to add more USDT to PieBot on a regular basis, for example every week.
-
-This ensures the bot has enough time to buy more coins using the new money, and have some time to keep the portfolio balanced before the next deposit.
+PieBot has no maximum order value for selling a holding to bring it back on target, to ensure as much profit is secured as possible.
 
 ## Requirements
 - [Git](https://git-scm.com/download) `2.x`
@@ -143,6 +107,18 @@ A comma separated list of the coin pairs you want PieBot to trade. For example, 
 
 You will need to define both the token you want to trade, and the whole coin pair, just like above.
 
+#### buy_frequency
+
+Set after how many hours the **Buy** task should repeat.
+
+**Default value** - `8`
+
+#### rebalance_frequency
+
+Set after how many hours the **Rebalance** task should repeat.
+
+**Default value** - `1`
+
 #### usdt_reserve
 
 This value tells PieBot how much USDT it should keep aside to not trade with. The value reflects a percentage, and should be between `0` and `1`.
@@ -161,16 +137,22 @@ The minimum value an order should be for PieBot to execute it.
 
 - Firstly, due to the nature of quantity and price decimal points, some coins have a much larger minimum order value than others. For exmaple, `ATOM` only has 2 decimal places for quantity, so `0.01` (the smallest amount) of `ATOM` works out at `0.133 USDT`*
 - Secondly, it prevents situations where the bot might want to rebalance a coin pair if it's `0.01 USDT` over target, which is not an efficent use of trading fees
+  
+_*Price correct at time of writing_
 
 **Default value** - `0.25`
 
-_*Price correct at time of writing_
+#### max_buy_order_value
 
-#### max_order_value
-
-The maximum **buy** value an order should be for PieBot to execute it. PieBot has no upper limit when selling to rebalance orders.
+The maximum buy value an order should be in the **Buy** task for PieBot to execute it.
 
 **Default value** - `0.50`
+
+#### max_rebalance_order_value
+
+The maximum buy value an order should be in the **Rebalance** task for PieBot to execute it. PieBot has no upper limit when selling to rebalance orders.
+
+**Default value** - `0.25`
 
 ### Operation
 

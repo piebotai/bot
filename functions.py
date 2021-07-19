@@ -19,6 +19,16 @@ def current_time(new_line):
         print(colored(time_data, "yellow"))
 
 
+# Gets the total available value of the portfolio
+def get_available_portfolio_value(value):
+    # Keeps aside the defined USDT reserves
+    usdt_reserve_value = (value / 100) * (usdt_reserve * 100)
+
+    total_available_balance = value - usdt_reserve_value
+
+    return total_available_balance
+
+
 # Gets the total balance of a coin
 def get_coin_balance(coin):
     coin_balance_request = {
@@ -40,6 +50,15 @@ def get_coin_balance(coin):
     return coin_total_balance
 
 
+# Gets the price of a coin pair
+def get_coin_price(pair):
+    get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
+    ticker = json.loads(get_price_response.content)
+    coin_price = ticker["result"]["data"]["b"]
+
+    return coin_price
+
+
 # Gets the details of a coin pair
 def get_pair_details(pair):
     def get_instrument(instruments, name):
@@ -56,13 +75,26 @@ def get_pair_details(pair):
     return details
 
 
-# Gets the price of a coin pair
-def get_coin_price(pair):
-    get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
-    ticker = json.loads(get_price_response.content)
-    coin_price = ticker["result"]["data"]["b"]
+# Gets the total value of the portfolio
+def get_portfolio_value(pairs, include_usdt):
+    total_balance = 0
 
-    return coin_price
+    for pair in pairs:
+        # Gets the total number of coins for this coin pair
+        coin_balance = get_coin_balance(pair[0])
+
+        # Gets the current price for this coin pair
+        coin_price = get_coin_price(pair[1])
+
+        total_balance = total_balance + (coin_balance * coin_price)
+
+    if include_usdt:
+        # Get the total balance of USDT and add it to the current collected balance
+        usdt_total_balance = get_coin_balance("USDT")
+
+        total_balance = total_balance + usdt_total_balance
+
+    return total_balance
 
 
 # Submits a buy order
@@ -187,17 +219,30 @@ def pre_flight_checks():
             print(colored("Your minimum order value must be 0.25 or greater", "red"))
             sys.exit()
 
-    # Checks whether the maximum order value has been defined and is valid
+    # Checks whether the maximum Buy order value has been defined and is valid
     try:
-        max_order_value
+        max_buy_order_value
     except NameError:
         print(emoji.emojize(":x:", use_aliases=True), end=" ")
-        print(colored("Your maximum order value is missing from the config file", "red"))
+        print(colored("Your maximum Buy order value is missing from the config file", "red"))
         sys.exit()
     else:
-        if max_order_value < min_order_value:
+        if max_buy_order_value < min_order_value:
             print(emoji.emojize(":x:", use_aliases=True), end=" ")
-            print(colored("Your maximum order value cannot be smaller than your minimum order value", "red"))
+            print(colored("Your maximum Buy order value cannot be smaller than your minimum order value", "red"))
+            sys.exit()
+
+    # Checks whether the maximum Rebalance order value has been defined and is valid
+    try:
+        max_rebalance_order_value
+    except NameError:
+        print(emoji.emojize(":x:", use_aliases=True), end=" ")
+        print(colored("Your maximum Rebalance order value is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if max_rebalance_order_value < min_order_value:
+            print(emoji.emojize(":x:", use_aliases=True), end=" ")
+            print(colored("Your maximum Rebalance order value cannot be smaller than your minimum order value", "red"))
             sys.exit()
 
     # Send a private request to test if the API key and API secret are correct
