@@ -156,7 +156,7 @@ def order_sell(pair, quantity):
 
 # Checks everything is in order before the bot runs
 def pre_flight_checks():
-    print(colored("Performing pre-flight checks", "cyan"))
+    print(colored("Performing pre-flight checks...", "cyan"))
 
     # Checks whether the environment has been defined
     try:
