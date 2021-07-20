@@ -112,7 +112,7 @@ def rebalance(pairs):
                 print_value = round(order_value, 2)
                 current_time(True)
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"), end=" ")
+                print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
@@ -137,7 +137,7 @@ def rebalance(pairs):
                 print_value = round(difference, 2)
                 current_time(True)
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[SELL]", "magenta"), end=" ")
+                print(colored("[SELL]", "magenta"))
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
