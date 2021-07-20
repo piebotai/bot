@@ -60,7 +60,6 @@ git pull origin main
 Install the required packages:
 
 ```
-pip3 install emoji
 pip3 install schedule
 pip3 install termcolor
 ```

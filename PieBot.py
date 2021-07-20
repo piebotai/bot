@@ -1,5 +1,4 @@
 from functions import *
-import emoji
 import schedule
 
 pre_flight_checks()
@@ -10,7 +9,6 @@ def buy(pairs):
     # Let users know the bot has been called and is running
     print()
     print(colored("Buy", "yellow"))
-    print(emoji.emojize(":mag:", use_aliases=True), end=" ")
     print(colored("Checking if there is enough USDT available", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, True)
@@ -21,7 +19,6 @@ def buy(pairs):
     required_usdt = max_buy_order_value * len(pairs)
 
     if required_usdt <= total_usdt_available:
-        print(emoji.emojize(":money_bag:", use_aliases=True), end=" ")
         print(colored("Placing orders", "cyan"))
 
         for pair in pairs:
@@ -39,10 +36,7 @@ def buy(pairs):
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"), end=" ")
 
-                if order_confirmed:
-                    print(emoji.emojize(":white_check_mark:", use_aliases=True))
-                else:
-                    print(emoji.emojize(":x:", use_aliases=True))
+                if not order_confirmed:
                     print(order.status_code, order.reason)
                     print(order.content)
 
@@ -53,10 +47,8 @@ def buy(pairs):
                 print(colored("[BUY]", "green"))
 
     else:
-        print(emoji.emojize(":money_with_wings:", use_aliases=True), end=" ")
         print(colored("Not enough USDT available", "yellow"))
 
-    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
 
 
@@ -65,7 +57,6 @@ def rebalance(pairs):
     # Let users know the bot has been called and is running
     print()
     print(colored("Rebalance", "yellow"))
-    print(emoji.emojize(":mag:", use_aliases=True), end=" ")
     print(colored("Collecting current balances", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, False)
@@ -73,10 +64,8 @@ def rebalance(pairs):
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_portfolio_value / len(pairs)
 
-    print(emoji.emojize(":white_check_mark:", use_aliases=True), end=" ")
     print(colored("Balances collected", "green"))
 
-    print(emoji.emojize(":money_bag:", use_aliases=True), end=" ")
     print(colored("Placing orders", "cyan"))
 
     for pair in pairs:
@@ -129,10 +118,7 @@ def rebalance(pairs):
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"), end=" ")
 
-                if order_confirmed:
-                    print(emoji.emojize(":white_check_mark:", use_aliases=True))
-                else:
-                    print(emoji.emojize(":x:", use_aliases=True))
+                if not order_confirmed:
                     print(order.status_code, order.reason)
                     print(order.content)
 
@@ -155,10 +141,7 @@ def rebalance(pairs):
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
                 print(colored("[SELL]", "magenta"), end=" ")
 
-                if order_confirmed:
-                    print(emoji.emojize(":white_check_mark:", use_aliases=True))
-                else:
-                    print(emoji.emojize(":x:", use_aliases=True))
+                if not order_confirmed:
                     print(order.status_code, order.reason)
                     print(order.content)
 
@@ -173,12 +156,10 @@ def rebalance(pairs):
             print(pair[0], end=" ")
             print(colored("[SKIP]", "yellow"))
 
-    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
 
 
 if environment == "production":
-    print(emoji.emojize(":hourglass:", use_aliases=True), end=" ")
     print(colored("Waiting to be called", "cyan"))
 
     schedule.every(rebalance_frequency).hours.at(":00").do(rebalance, pairs=pair_list)

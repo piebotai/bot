@@ -1,4 +1,3 @@
-import emoji
 import hashlib
 import hmac
 import json
@@ -157,14 +156,12 @@ def order_sell(pair, quantity):
 
 # Checks everything is in order before the bot runs
 def pre_flight_checks():
-    print(emoji.emojize(":rocket:", use_aliases=True), end=" ")
     print(colored("Performing pre-flight checks", "cyan"))
 
     # Checks whether the environment has been defined
     try:
         environment
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your environment is missing from the config file", "red"))
         sys.exit()
 
@@ -172,7 +169,6 @@ def pre_flight_checks():
     try:
         api_key and api_secret
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your API key and API secret are missing from the config file", "red"))
         sys.exit()
 
@@ -180,12 +176,10 @@ def pre_flight_checks():
     try:
         pair_list
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your trading coin pairs are missing from the config file", "red"))
         sys.exit()
     else:
         if len(pair_list) < 1:
-            print(emoji.emojize(":x:", use_aliases=True), end=" ")
             print(colored("You need to use at least one coin pair", "red"))
             sys.exit()
 
@@ -193,16 +187,13 @@ def pre_flight_checks():
     try:
         usdt_reserve
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your USDT reserve amount is missing from the config file", "red"))
         sys.exit()
     else:
         if usdt_reserve < 0:
-            print(emoji.emojize(":x:", use_aliases=True), end=" ")
             print(colored("You need to define a valid USDT reserve. If you don't want to use a reserve, set the value as 0", "red"))
             sys.exit()
         elif usdt_reserve > 80:
-            print(emoji.emojize(":x:", use_aliases=True), end=" ")
             print(colored("Your USDT reserve must be 80% or lower", "red"))
             sys.exit()
 
@@ -210,12 +201,10 @@ def pre_flight_checks():
     try:
         min_order_value
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your minimum order value is missing from the config file", "red"))
         sys.exit()
     else:
         if min_order_value < 0.25:
-            print(emoji.emojize(":x:", use_aliases=True), end=" ")
             print(colored("Your minimum order value must be 0.25 or greater", "red"))
             sys.exit()
 
@@ -223,12 +212,10 @@ def pre_flight_checks():
     try:
         max_buy_order_value
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your maximum Buy order value is missing from the config file", "red"))
         sys.exit()
     else:
         if max_buy_order_value < min_order_value:
-            print(emoji.emojize(":x:", use_aliases=True), end=" ")
             print(colored("Your maximum Buy order value cannot be smaller than your minimum order value", "red"))
             sys.exit()
 
@@ -236,12 +223,10 @@ def pre_flight_checks():
     try:
         max_rebalance_order_value
     except NameError:
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Your maximum Rebalance order value is missing from the config file", "red"))
         sys.exit()
     else:
         if max_rebalance_order_value < min_order_value:
-            print(emoji.emojize(":x:", use_aliases=True), end=" ")
             print(colored("Your maximum Rebalance order value cannot be smaller than your minimum order value", "red"))
             sys.exit()
 
@@ -263,12 +248,10 @@ def pre_flight_checks():
 
     if init_status == 200:
         # The bot can connect to the account, has been started, and is waiting to be called
-        print(emoji.emojize(":white_check_mark:", use_aliases=True), end=" ")
         print(colored("Pre-flight checks successful", "green"))
 
     else:
         # Could not connect to the account
-        print(emoji.emojize(":x:", use_aliases=True), end=" ")
         print(colored("Could not connect to your account. Please ensure the API key and API secret are correct and have the right privileges", "red"))
         sys.exit()
 
