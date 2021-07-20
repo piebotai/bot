@@ -68,6 +68,8 @@ def rebalance(pairs):
 
     print(colored("Placing orders", "cyan"))
 
+    total_orders = 0
+
     for pair in pairs:
         # Sets null defaults
         buy_order = False
@@ -106,6 +108,8 @@ def rebalance(pairs):
                 order_value = max_rebalance_order_value
 
         if buy_order:
+            total_orders = total_orders + 1
+
             if environment == "production":
                 order_confirmed = False
                 order = order_buy(pair[1], order_value)
@@ -129,6 +133,8 @@ def rebalance(pairs):
                 print(colored("[BUY]", "green"))
 
         elif sell_order:
+            total_orders = total_orders + 1
+
             if environment == "production":
                 order_confirmed = False
                 order = order_sell(pair[1], order_value)
@@ -151,10 +157,8 @@ def rebalance(pairs):
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
                 print(colored("[SELL]", "magenta"))
 
-        else:
-            current_time(True)
-            print(pair[0], end=" ")
-            print(colored("[SKIP]", "yellow"))
+    if total_orders == 0:
+        print(colored("No coins were eligible for a rebalance", "yellow"))
 
     print(colored("Waiting to be called", "cyan"))
 
