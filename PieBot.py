@@ -53,16 +53,12 @@ def rebalance(pairs):
     # Let users know the bot has been called and is running
     print()
     print(colored("Rebalance", "yellow"))
-    print(colored("Collecting current balances", "cyan"))
+    print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, False)
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_portfolio_value / len(pairs)
-
-    print(colored("Balances collected", "green"))
-
-    print(colored("Placing orders", "cyan"))
 
     total_orders = 0
 
@@ -154,13 +150,13 @@ def rebalance(pairs):
                 print(colored("[SELL]", "magenta"))
 
     if total_orders == 0:
-        print(colored("No coins were eligible for a rebalance", "yellow"))
+        print(colored("No coins were eligible to be rebalanced", "yellow"))
 
-    print(colored("Waiting to be called", "cyan"))
+    print(colored("Waiting to be called...", "cyan"))
 
 
 if environment == "production":
-    print(colored("Waiting to be called", "cyan"))
+    print(colored("Waiting to be called...", "cyan"))
 
     schedule.every(rebalance_frequency).hours.at(":00").do(rebalance, pairs=pair_list)
     schedule.every(buy_frequency).hours.at(":30").do(buy, pairs=pair_list)
