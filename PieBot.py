@@ -9,7 +9,7 @@ def buy(pairs):
     # Let users know the bot has been called and is running
     print()
     print(colored("Buy", "yellow"))
-    print(colored("Checking if there is enough USDT available", "cyan"))
+    print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, True)
     total_usdt_reserve = (total_portfolio_value / 100) * (usdt_reserve * 100)
@@ -19,8 +19,6 @@ def buy(pairs):
     required_usdt = max_buy_order_value * len(pairs)
 
     if required_usdt <= total_usdt_available:
-        print(colored("Placing orders", "cyan"))
-
         for pair in pairs:
             order_value = max_buy_order_value
 
@@ -33,8 +31,7 @@ def buy(pairs):
 
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"), end=" ")
+                print(str(print_value) + " USDT - " + pair[0])
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
@@ -43,13 +40,12 @@ def buy(pairs):
             else:
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"))
+                print(str(print_value) + " USDT - " + pair[0])
 
     else:
         print(colored("Not enough USDT available", "yellow"))
 
-    print(colored("Waiting to be called", "cyan"))
+    print(colored("Waiting to be called...", "cyan"))
 
 
 # Rebalance all coin pairs so they are on target
