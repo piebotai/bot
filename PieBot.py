@@ -150,6 +150,7 @@ def rebalance(pairs):
                 print(colored("[SELL]", "magenta"))
 
     if total_orders == 0:
+        current_time(True)
         print(colored("No coins were eligible to be rebalanced", "yellow"))
 
     print(colored("Waiting to be called...", "cyan"))
