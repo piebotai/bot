@@ -9,7 +9,7 @@ def buy(pairs):
     # Let users know the bot has been called and is running
     print()
     print(colored("Buy", "yellow"))
-    print(colored("Checking if there is enough USDT available", "cyan"))
+    print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, True)
     total_usdt_reserve = (total_portfolio_value / 100) * (usdt_reserve * 100)
@@ -19,8 +19,6 @@ def buy(pairs):
     required_usdt = max_buy_order_value * len(pairs)
 
     if required_usdt <= total_usdt_available:
-        print(colored("Placing orders", "cyan"))
-
         for pair in pairs:
             order_value = max_buy_order_value
 
@@ -33,8 +31,7 @@ def buy(pairs):
 
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"), end=" ")
+                print(str(print_value) + " USDT - " + pair[0])
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
@@ -49,7 +46,7 @@ def buy(pairs):
     else:
         print(colored("Not enough USDT available", "yellow"))
 
-    print(colored("Waiting to be called", "cyan"))
+    print(colored("Waiting to be called...", "cyan"))
 
 
 # Rebalance all coin pairs so they are on target
@@ -57,16 +54,14 @@ def rebalance(pairs):
     # Let users know the bot has been called and is running
     print()
     print(colored("Rebalance", "yellow"))
-    print(colored("Collecting current balances", "cyan"))
+    print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, False)
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_portfolio_value / len(pairs)
 
-    print(colored("Balances collected", "green"))
-
-    print(colored("Placing orders", "cyan"))
+    total_orders = 0
 
     for pair in pairs:
         # Sets null defaults
@@ -106,6 +101,8 @@ def rebalance(pairs):
                 order_value = max_rebalance_order_value
 
         if buy_order:
+            total_orders = total_orders + 1
+
             if environment == "production":
                 order_confirmed = False
                 order = order_buy(pair[1], order_value)
@@ -116,7 +113,7 @@ def rebalance(pairs):
                 print_value = round(order_value, 2)
                 current_time(True)
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"), end=" ")
+                print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
@@ -129,6 +126,8 @@ def rebalance(pairs):
                 print(colored("[BUY]", "green"))
 
         elif sell_order:
+            total_orders = total_orders + 1
+
             if environment == "production":
                 order_confirmed = False
                 order = order_sell(pair[1], order_value)
@@ -139,7 +138,7 @@ def rebalance(pairs):
                 print_value = round(difference, 2)
                 current_time(True)
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[SELL]", "magenta"), end=" ")
+                print(colored("[SELL]", "magenta"))
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
@@ -151,16 +150,15 @@ def rebalance(pairs):
                 print(str(print_value) + " USDT - " + pair[0], end=" ")
                 print(colored("[SELL]", "magenta"))
 
-        else:
-            current_time(True)
-            print(pair[0], end=" ")
-            print(colored("[SKIP]", "yellow"))
+    if total_orders == 0:
+        current_time(True)
+        print(colored("No coins were eligible to be rebalanced", "yellow"))
 
-    print(colored("Waiting to be called", "cyan"))
+    print(colored("Waiting to be called...", "cyan"))
 
 
 if environment == "production":
-    print(colored("Waiting to be called", "cyan"))
+    print(colored("Waiting to be called...", "cyan"))
 
     schedule.every(rebalance_frequency).hours.at(":00").do(rebalance, pairs=pair_list)
     schedule.every(buy_frequency).hours.at(":30").do(buy, pairs=pair_list)
