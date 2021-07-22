@@ -31,7 +31,8 @@ def buy(pairs):
 
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0])
+                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
                     print(order.status_code, order.reason)
