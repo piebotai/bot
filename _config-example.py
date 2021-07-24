@@ -26,4 +26,4 @@ buy_order_value = 0.50
 # How much USDT do you want to keep as a reserve. This is a percentage of the total portfolio balance
 # 0.05 = 5%
 # 0.15 = 15%
-usdt_reserve = 0.05
+usdt_reserve = 0.02

@@ -154,7 +154,7 @@ For example, 5% = `0.05`, 15% = `0.15` etc.
 
 **It is strongly recommended that you don't set this value as 0.** It's a good idea to leave some USDT in reserve, so PieBot has some equity available should it need it.
 
-**Default value** - `0.05`
+**Default value** - `0.02`
 
 ### Operation
 
