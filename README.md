@@ -139,9 +139,11 @@ For example, 5% = `0.05`, 15% = `0.15` etc.
 
 **Default value** - `0.05`
 
-#### max_buy_order_value
+#### buy_order_value
 
-The maximum buy value an order should be in the **Buy** task for PieBot to execute it.
+The USDT value that PieBot will buy for each enabled coin pair in the Buy task.
+
+For example, with 10 enabled coin pairs, and a `buy_order_value` of `0.5`, the Buy task would use a total of `5.00 USDT` - `0.5 * 10` each time it is run.
 
 **Default value** - `0.50`
 

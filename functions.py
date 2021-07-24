@@ -201,13 +201,13 @@ def pre_flight_checks():
 
     # Checks whether the maximum Buy order value has been defined and is valid
     try:
-        max_buy_order_value
+        buy_order_value
     except NameError:
-        print(colored("Your maximum Buy order value is missing from the config file", "red"))
+        print(colored("Your Buy order value is missing from the config file", "red"))
         sys.exit()
     else:
-        if max_buy_order_value < min_order_value:
-            print(colored("Your maximum Buy order value cannot be smaller than the minimum order value", "red"))
+        if buy_order_value < min_order_value:
+            print(colored("Your Buy order value cannot be smaller than the minimum order value", "red"))
             sys.exit()
 
     # Checks whether the maximum Rebalance order value has been defined and is valid

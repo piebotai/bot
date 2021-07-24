@@ -19,11 +19,11 @@ def buy(pairs):
 
     total_usdt_value = get_coin_balance("USDT")
     total_usdt_available = total_usdt_value - total_usdt_reserve
-    required_usdt = max_buy_order_value * len(pairs)
+    required_usdt = buy_order_value * len(pairs)
 
     if required_usdt <= total_usdt_available:
         for pair in pairs:
-            order_value = max_buy_order_value
+            order_value = buy_order_value
 
             if environment == "production":
                 order_confirmed = False
