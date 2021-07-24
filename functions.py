@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import json
 import requests
+import signal
 import sys
 from termcolor import colored
 import time
@@ -9,6 +10,20 @@ import time
 from _config import *
 
 min_order_value = 0.25
+
+
+# Stops PieBot gracefully
+class StopSignal:
+    stop_now = False
+
+    def __init__(self):
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+    def exit_gracefully(self, *args):
+        self.stop_now = True
+        print()
+        print(colored("Shutting down...", "cyan"))
 
 
 # Prints the current time

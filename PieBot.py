@@ -1,5 +1,6 @@
 from functions import *
 import schedule
+import signal
 
 pre_flight_checks()
 
@@ -162,7 +163,9 @@ if environment == "production":
     schedule.every(rebalance_frequency).hours.at(":00").do(rebalance, pairs=pair_list)
     schedule.every(buy_frequency).hours.at(":30").do(buy, pairs=pair_list)
 
-    while True:
+    stop = StopSignal()
+
+    while not stop.stop_now:
         schedule.run_pending()
         time.sleep(1)
 
