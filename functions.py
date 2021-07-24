@@ -24,6 +24,7 @@ class StopSignal:
         self.stop_now = True
         print()
         print(colored("Shutting down...", "cyan"))
+        print()
 
 
 # Prints the current time
