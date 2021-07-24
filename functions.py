@@ -8,6 +8,8 @@ import time
 
 from _config import *
 
+min_order_value = 0.25
+
 
 # Prints the current time
 def current_time(new_line):
@@ -183,7 +185,18 @@ def pre_flight_checks():
             print(colored("You need to use at least one coin pair", "red"))
             sys.exit()
 
-    # Checks whether the USDT reserves amount has been defined
+    # Checks whether the maximum Buy order value has been defined and is valid
+    try:
+        buy_order_value
+    except NameError:
+        print(colored("Your Buy order value is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if buy_order_value < min_order_value:
+            print(colored("Your Buy order value cannot be smaller than the minimum order value", "red"))
+            sys.exit()
+
+    # Checks whether the USDT reserve amount has been defined
     try:
         usdt_reserve
     except NameError:
@@ -195,39 +208,6 @@ def pre_flight_checks():
             sys.exit()
         elif usdt_reserve > 80:
             print(colored("Your USDT reserve must be 80% or lower", "red"))
-            sys.exit()
-
-    # Checks whether the minimum order value has been defined and is valid
-    try:
-        min_order_value
-    except NameError:
-        print(colored("Your minimum order value is missing from the config file", "red"))
-        sys.exit()
-    else:
-        if min_order_value < 0.25:
-            print(colored("Your minimum order value must be 0.25 or greater", "red"))
-            sys.exit()
-
-    # Checks whether the maximum Buy order value has been defined and is valid
-    try:
-        max_buy_order_value
-    except NameError:
-        print(colored("Your maximum Buy order value is missing from the config file", "red"))
-        sys.exit()
-    else:
-        if max_buy_order_value < min_order_value:
-            print(colored("Your maximum Buy order value cannot be smaller than your minimum order value", "red"))
-            sys.exit()
-
-    # Checks whether the maximum Rebalance order value has been defined and is valid
-    try:
-        max_rebalance_order_value
-    except NameError:
-        print(colored("Your maximum Rebalance order value is missing from the config file", "red"))
-        sys.exit()
-    else:
-        if max_rebalance_order_value < min_order_value:
-            print(colored("Your maximum Rebalance order value cannot be smaller than your minimum order value", "red"))
             sys.exit()
 
     # Send a private request to test if the API key and API secret are correct
