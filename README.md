@@ -3,14 +3,24 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
 ## Table of Contents
 
 - [How It Works](#how-it-works)
-  - [Example](#example)
-  - [Regular Deposits](#regular-deposits)
+  - [Buy](#buy)
+  - [Rebalance](#rebalance)
+  - [Minimum Order Values](#minimum-order-values)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Config File](#config-file)
-    - [Operation](#operation)
-    - [Updating](#updating)
+  - [Config File](#config-file)
+    - [environment](#environment)
+    - [api_key](#api_key)
+    - [api_secret](#api_secret)
+    - [pair_list](#pair_list)
+    - [buy_frequency](#buy_frequency)
+    - [rebalance_frequency](#rebalance_frequency)
+    - [buy_order_value](#buy_order_value)
+    - [usdt_reserve](#usdt_reserve)
+    - [max_rebalance_order_value](#max_rebalance_order_value)
+  - [Operation](#operation)
+  - [Updating](#updating)
 - [Disclaimer](#disclaimer)
 - [Donate](#donate)
 
@@ -129,6 +139,14 @@ Set after how many hours the **Rebalance** task should repeat.
 
 **Default value** - `1`
 
+#### buy_order_value
+
+The USDT value that PieBot will buy for each enabled coin pair in the Buy task.
+
+For example, with 10 enabled coin pairs, and a `buy_order_value` of `0.5`, the Buy task would use a total of `5.00 USDT` - `0.5 * 10` each time it is run.
+
+**Default value** - `0.50`
+
 #### usdt_reserve
 
 This value tells PieBot how much USDT it should keep aside to not trade with. The value reflects a percentage, and should be between `0` and `1`.
@@ -138,14 +156,6 @@ For example, 5% = `0.05`, 15% = `0.15` etc.
 **It is strongly recommended that you don't set this value as 0.** It's a good idea to leave some USDT in reserve, so PieBot has some equity available should it need it.
 
 **Default value** - `0.05`
-
-#### buy_order_value
-
-The USDT value that PieBot will buy for each enabled coin pair in the Buy task.
-
-For example, with 10 enabled coin pairs, and a `buy_order_value` of `0.5`, the Buy task would use a total of `5.00 USDT` - `0.5 * 10` each time it is run.
-
-**Default value** - `0.50`
 
 #### max_rebalance_order_value
 
