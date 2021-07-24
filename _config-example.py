@@ -17,7 +17,7 @@ pair_list = [
 ]
 
 # Sets after how many hours each task should repeat
-buy_frequency = 8
+buy_frequency = 6
 rebalance_frequency = 1
 
 # The USDT value that PieBot will buy for each enabled coin pair in the "Buy" task
