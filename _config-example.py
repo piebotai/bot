@@ -26,6 +26,5 @@ rebalance_frequency = 1
 usdt_reserve = 0.05
 
 # Sets the minimum and maximum order values, so we don't eat into our USDT balance too quickly
-min_order_value = 0.25
 max_buy_order_value = 0.50
 max_rebalance_order_value = 0.25

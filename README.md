@@ -128,19 +128,6 @@ For example, 5% = `0.05`, 15% = `0.15` etc.
 
 **Default value** - `0.05`
 
-#### min_order_value
-
-The minimum value an order should be for PieBot to execute it.
-
-**It is strongly recommended to leave this value at 0.25**, which has been set as the default for two reasons:
-
-- Firstly, due to the nature of quantity and price decimal points, some coins have a much larger minimum order value than others. For exmaple, `ATOM` only has 2 decimal places for quantity, so `0.01` (the smallest amount) of `ATOM` works out at `0.133 USDT`*
-- Secondly, it prevents situations where the bot might want to rebalance a coin pair if it's `0.01 USDT` over target, which is not an efficent use of trading fees
-  
-_*Price correct at time of writing_
-
-**Default value** - `0.25`
-
 #### max_buy_order_value
 
 The maximum buy value an order should be in the **Buy** task for PieBot to execute it.

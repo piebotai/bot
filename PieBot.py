@@ -4,6 +4,9 @@ import schedule
 pre_flight_checks()
 
 
+min_order_value = 0.25
+
+
 # Buy more coins at a regular interval
 def buy(pairs):
     # Let users know the bot has been called and is running
