@@ -53,7 +53,7 @@ def buy(pairs):
     print(colored("Waiting to be called...", "cyan"))
 
 
-# Rebalance all coin pairs so they are on target
+# Rebalance all coins so they are on target
 def rebalance(pairs):
     # Let users know the bot has been called and is running
     print()
@@ -75,34 +75,29 @@ def rebalance(pairs):
         order_value = 0
         pair_value = 0
 
-        # Gets the total number of coins for this coin pair
+        # Gets the total number of coins for this coin
         coin_balance = get_coin_balance(pair[0])
 
-        # Gets the current price for this coin pair
+        # Gets the current price for this coin
         coin_price = get_coin_price(pair[1])
 
         pair_value = coin_balance * coin_price
 
-        # If the coin pair value is over target, sell the excess if it's greater than the minimum order value
+        # If the coin value is over target, sell the excess if it's difference is greater than or equal to the minimum order value
         if pair_value > target_per_coin:
             difference = pair_value - target_per_coin
+
             if difference >= min_order_value:
                 sell_order = True
                 order_value = difference / coin_price
 
-        # If the coin pair value is under target, work out how much we need to buy
+        # If the coin value is under target, buy more if it's difference is greater than or equal to the minimum order value
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
-            # If the difference is between min_order_value and max_rebalance_order_value (inclusive), set the difference as the order value
-            if min_order_value <= difference <= max_rebalance_order_value:
+            if difference >= min_order_value:
                 buy_order = True
                 order_value = difference
-
-            # If the difference is greater than max_rebalance_order_value, set the order value as max_rebalance_order_value
-            elif difference > max_rebalance_order_value:
-                buy_order = True
-                order_value = max_rebalance_order_value
 
         if buy_order:
             total_orders = total_orders + 1

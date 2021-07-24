@@ -185,20 +185,6 @@ def pre_flight_checks():
             print(colored("You need to use at least one coin pair", "red"))
             sys.exit()
 
-    # Checks whether the USDT reserves amount has been defined
-    try:
-        usdt_reserve
-    except NameError:
-        print(colored("Your USDT reserve amount is missing from the config file", "red"))
-        sys.exit()
-    else:
-        if usdt_reserve < 0:
-            print(colored("You need to define a valid USDT reserve. If you don't want to use a reserve, set the value as 0", "red"))
-            sys.exit()
-        elif usdt_reserve > 80:
-            print(colored("Your USDT reserve must be 80% or lower", "red"))
-            sys.exit()
-
     # Checks whether the maximum Buy order value has been defined and is valid
     try:
         buy_order_value
@@ -210,15 +196,18 @@ def pre_flight_checks():
             print(colored("Your Buy order value cannot be smaller than the minimum order value", "red"))
             sys.exit()
 
-    # Checks whether the maximum Rebalance order value has been defined and is valid
+    # Checks whether the USDT reserve amount has been defined
     try:
-        max_rebalance_order_value
+        usdt_reserve
     except NameError:
-        print(colored("Your maximum Rebalance order value is missing from the config file", "red"))
+        print(colored("Your USDT reserve amount is missing from the config file", "red"))
         sys.exit()
     else:
-        if max_rebalance_order_value < min_order_value:
-            print(colored("Your maximum Rebalance order value cannot be smaller than the minimum order value", "red"))
+        if usdt_reserve < 0:
+            print(colored("You need to define a valid USDT reserve. If you don't want to use a reserve, set the value as 0", "red"))
+            sys.exit()
+        elif usdt_reserve > 80:
+            print(colored("Your USDT reserve must be 80% or lower", "red"))
             sys.exit()
 
     # Send a private request to test if the API key and API secret are correct

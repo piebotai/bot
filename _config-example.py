@@ -27,5 +27,3 @@ buy_order_value = 0.50
 # 0.05 = 5%
 # 0.15 = 15%
 usdt_reserve = 0.05
-
-max_rebalance_order_value = 0.25
