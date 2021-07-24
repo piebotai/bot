@@ -40,6 +40,17 @@ The maximum value PieBot buys for each coin is set in the `_config.py` file usin
 
 PieBot has no maximum order value for selling a holding to bring it back on target, to ensure as much profit is secured as possible.
 
+### Minimum Order Values
+
+Each order placed during the Buy and Rebalance task is subject to a minimum order value.
+
+This value cannot be changed, and is set at `0.25` USDT per coin. The reasons for this are as follows:
+
+- Firstly, due to the nature of quantity and price decimal points, some coins have a much larger minimum order value than others. For exmaple, `ATOM` only has 2 decimal places for quantity, so `0.01` (the smallest amount) of `ATOM` works out at `0.133 USDT`*. In this example, if an order was placed with a value of `0.12` or lower, the order would be rejected by the exchange, which would make it hard for PieBot to keep your holdings balanced
+- Secondly, it prevents situations where the bot might want to rebalance a coin pair if it's `0.01 USDT` over target, which is not an efficent use of trading fees
+
+_*Price correct at time of writing_
+
 ## Requirements
 - [Git](https://git-scm.com/download) `2.x`
 - [Python](https://www.python.org/downloads) `3.9`
