@@ -97,7 +97,7 @@ _config.py
 _config-example.py
 ```
 
-For now, you can now safely ignore `_config-example.py`. Open `_config.py` in your text editor of choice, and configure your environment accordingly:
+For now, you can safely ignore `_config-example.py`. Open `_config.py` in your text editor of choice, and configure your environment accordingly:
 
 #### environment
 
