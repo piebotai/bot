@@ -1,1 +1,1 @@
-PieBot 2.0.1
+PieBot 3.0.0
