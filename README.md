@@ -1,4 +1,4 @@
-PieBot is an automated cryptocurrency trading bot, built with Python, for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
+PieBot is a DCA (Dollar Cost Averaging) cryptocurrency trading bot, built with Python, for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
 
 ## Table of Contents
 
@@ -24,8 +24,6 @@ PieBot is an automated cryptocurrency trading bot, built with Python, for the [C
 - [Donate](#donate)
 
 ## How It Works
-
-PieBot is a very simple Dollar Cost Averaging (DCA) bot for the [Crypto.com Exchange](https://crypto.com/exch/wha692z6ba).
 
 PieBot is designed to purchase small amounts of your enabled cryptocurrencies at regular intervals, and also aims to keep your holdings the same value by selling over-performers, and buying more of the under-performers.
 
