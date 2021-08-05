@@ -70,9 +70,7 @@ Run these commands to get PieBot's code, and to prepare your environment for set
 ```
 git clone https://github.com/piebotai/bot.git PieBot
 cd PieBot
-git fetch --all
-git checkout main
-git pull origin main
+sh init.sh
 ```
 
 Install the required packages:
@@ -174,14 +172,12 @@ pm2 start PieBot.py --name PieBot --interpreter=python3 --time
 
 ### Updating
 
-PieBot updates are pushed directly to this Git repository, so a simple `git pull` on the `main` branch is normally all that is required to run the latest version of the bot.
+PieBot updates are pushed directly to this Git repository, so a simple `git pull` on the `main` branch is normally all that is required to run the latest version of the bot. Luckily there is a little script file you can run that handles it for you.
 
-Ensure you have stopped PieBot before updating it, and restart it again once you have updated.
+**Ensure you have stopped PieBot before updating it, and restart it again once you have updated.**
 
 ```
-git reset HEAD --hard
-git checkout main
-git pull origin main
+sh update.sh
 ```
 
 ## Disclaimer
