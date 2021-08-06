@@ -66,12 +66,11 @@ def rebalance(pairs):
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_portfolio_value / len(pairs)
 
-    total_orders = 0
+    buy_orders = []
+    sell_orders = []
 
     for pair in pairs:
         # Sets null defaults
-        buy_order = False
-        sell_order = False
         difference = 0
         order_value = 0
         pair_value = 0
@@ -89,70 +88,24 @@ def rebalance(pairs):
             difference = pair_value - target_per_coin
 
             if difference >= min_order_value:
-                sell_order = True
                 order_value = difference / coin_price
+                sell_orders.append([pair[0], order_value])
 
         # If the coin value is under target, buy more if it's difference is greater than or equal to the minimum order value
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
             if difference >= min_order_value:
-                buy_order = True
                 order_value = difference
+                buy_orders.append([pair[0], order_value])
 
-        if buy_order:
-            total_orders = total_orders + 1
+    if len(sell_orders) >= 1:
+        print("Sell Orders")
+        print(list(sell_orders))
 
-            if environment == "production":
-                order_confirmed = False
-                order = order_buy(pair[1], order_value)
-                time.sleep(0.25)
-                if order.status_code == 200:
-                    order_confirmed = True
-
-                print_value = round(order_value, 2)
-                current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"))
-
-                if not order_confirmed:
-                    print(order.status_code, order.reason)
-                    print(order.content)
-
-            else:
-                print_value = round(order_value, 2)
-                current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[BUY]", "green"))
-
-        elif sell_order:
-            total_orders = total_orders + 1
-
-            if environment == "production":
-                order_confirmed = False
-                order = order_sell(pair[1], order_value)
-                time.sleep(0.25)
-                if order.status_code == 200:
-                    order_confirmed = True
-
-                print_value = round(difference, 2)
-                current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[SELL]", "magenta"))
-
-                if not order_confirmed:
-                    print(order.status_code, order.reason)
-                    print(order.content)
-
-            else:
-                print_value = round(difference, 2)
-                current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
-                print(colored("[SELL]", "magenta"))
-
-    if total_orders == 0:
-        current_time(True)
-        print(colored("No coins were eligible to be rebalanced", "yellow"))
+    if len(buy_orders) >= 1:
+        print("Buy Orders")
+        print(list(buy_orders))
 
     print(colored("Waiting to be called...", "cyan"))
 
@@ -170,5 +123,5 @@ if environment == "production":
         time.sleep(1)
 
 else:
-    buy(pairs=pair_list)
-    # rebalance(pairs=pair_list)
+    # buy(pairs=pair_list)
+    rebalance(pairs=pair_list)
