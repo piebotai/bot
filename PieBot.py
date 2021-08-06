@@ -89,7 +89,7 @@ def rebalance(pairs):
 
             if difference >= min_order_value:
                 order_value = difference / coin_price
-                sell_orders.append([pair[0], order_value])
+                sell_orders.append([pair[0], pair[1], order_value, difference])
 
         # If the coin value is under target, buy more if it's difference is greater than or equal to the minimum order value
         elif pair_value < target_per_coin:
@@ -97,15 +97,56 @@ def rebalance(pairs):
 
             if difference >= min_order_value:
                 order_value = difference
-                buy_orders.append([pair[0], order_value])
+                buy_orders.append([pair[0], pair[1], order_value, difference])
 
     if len(sell_orders) >= 1:
-        print("Sell Orders")
-        print(list(sell_orders))
+        for order in sell_orders:
+            if environment == "production":
+                order_confirmed = False
+                order = order_sell(order[1], order[2])
+                time.sleep(0.25)
+                if order.status_code == 200:
+                    order_confirmed = True
+
+                print_value = round(order[3], 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(colored("[SELL]", "magenta"))
+
+                if not order_confirmed:
+                    print(order.status_code, order.reason)
+                    print(order.content)
+
+            else:
+                print_value = round(order[3], 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(colored("[SELL]", "magenta"))
+
 
     if len(buy_orders) >= 1:
-        print("Buy Orders")
-        print(list(buy_orders))
+        for order in buy_orders:
+            if environment == "production":
+                order_confirmed = False
+                order = order_buy(order[1], order[2])
+                time.sleep(0.25)
+                if order.status_code == 200:
+                    order_confirmed = True
+
+                print_value = round(order[3], 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(colored("[BUY]", "green"))
+
+                if not order_confirmed:
+                    print(order.status_code, order.reason)
+                    print(order.content)
+
+            else:
+                print_value = round(order[3], 2)
+                current_time(True)
+                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(colored("[BUY]", "green"))
 
     print(colored("Waiting to be called...", "cyan"))
 
