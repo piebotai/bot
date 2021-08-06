@@ -104,9 +104,9 @@ def rebalance(pairs):
         for order in sell_orders:
             if environment == "production":
                 order_confirmed = False
-                order = order_sell(order[1], order[2])
+                order_request = order_sell(order[1], order[2])
                 time.sleep(0.25)
-                if order.status_code == 200:
+                if order_request.status_code == 200:
                     order_confirmed = True
 
                 print_value = round(order[3], 2)
@@ -115,8 +115,8 @@ def rebalance(pairs):
                 print(colored("[SELL]", "magenta"))
 
                 if not order_confirmed:
-                    print(order.status_code, order.reason)
-                    print(order.content)
+                    print(order_request.status_code, order_request.reason)
+                    print(order_request.content)
 
             else:
                 print_value = round(order[3], 2)
@@ -129,9 +129,9 @@ def rebalance(pairs):
         for order in buy_orders:
             if environment == "production":
                 order_confirmed = False
-                order = order_buy(order[1], order[2])
+                order_request = order_buy(order[1], order[2])
                 time.sleep(0.25)
-                if order.status_code == 200:
+                if order_request.status_code == 200:
                     order_confirmed = True
 
                 print_value = round(order[3], 2)
@@ -140,8 +140,8 @@ def rebalance(pairs):
                 print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
-                    print(order.status_code, order.reason)
-                    print(order.content)
+                    print(order_request.status_code, order_request.reason)
+                    print(order_request.content)
 
             else:
                 print_value = round(order[3], 2)
