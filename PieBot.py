@@ -170,5 +170,5 @@ if environment == "production":
         time.sleep(1)
 
 else:
-    # buy(pairs=pair_list)
-    rebalance(pairs=pair_list)
+    buy(pairs=pair_list)
+    # rebalance(pairs=pair_list)
