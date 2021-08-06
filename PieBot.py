@@ -68,6 +68,7 @@ def rebalance(pairs):
 
     buy_orders = []
     sell_orders = []
+    total_orders = 0
 
     for pair in pairs:
         # Sets null defaults
@@ -147,6 +148,11 @@ def rebalance(pairs):
                 current_time(True)
                 print(str(print_value) + " USDT - " + order[0], end=" ")
                 print(colored("[BUY]", "green"))
+
+    total_orders = len(sell_orders) + len(buy_orders)
+    if total_orders == 0:
+        current_time(True)
+        print(colored("No coins were eligible to be rebalanced", "yellow"))
 
     print(colored("Waiting to be called...", "cyan"))
 
