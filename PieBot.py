@@ -124,7 +124,6 @@ def rebalance(pairs):
                 print(str(print_value) + " USDT - " + order[0], end=" ")
                 print(colored("[SELL]", "magenta"))
 
-
     if len(buy_orders) >= 1:
         for order in buy_orders:
             if environment == "production":
