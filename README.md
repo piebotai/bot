@@ -99,6 +99,8 @@ _config-example.py
 
 For now, you can safely ignore `_config-example.py`. Open `_config.py` in your text editor of choice, and configure your environment accordingly:
 
+---
+
 #### environment
 
 This can be one of two options:
@@ -108,13 +110,19 @@ This can be one of two options:
 
 **Default value** - `production`
 
+---
+
 #### api_key
 
 The API key for your Crypto.com Exchange account
 
+---
+
 #### api_secret
 
 The API secret for your Crypto.com Exchange account
+
+---
 
 #### pair_list
 
@@ -124,17 +132,25 @@ A comma separated list of the coin pairs you want PieBot to trade. For example, 
 
 You will need to define both the token you want to trade, and the whole coin pair, just like above.
 
+---
+
 #### buy_frequency
 
 Set after how many hours the **Buy** task should repeat.
 
 **Default value** - `6`
 
+---
+
 #### rebalance_frequency
 
 Set after how many hours the **Rebalance** task should repeat.
 
+You can stop the Rebalance task from running by setting the value as `0`. In this situation, PieBot would just run the Buy task, and nothing else.
+
 **Default value** - `1`
+
+---
 
 #### buy_order_value
 
@@ -143,6 +159,8 @@ The USDT value that PieBot will buy for each enabled coin pair in the Buy task.
 For example, with 10 enabled coin pairs, and a `buy_order_value` of `0.5`, the Buy task would use a total of `5.00 USDT` - `0.5 * 10` each time it is run.
 
 **Default value** - `0.50`
+
+---
 
 #### usdt_reserve
 
@@ -153,6 +171,8 @@ For example, 5% = `0.05`, 15% = `0.15` etc.
 **It is strongly recommended that you don't set this value as 0.** It's a good idea to leave some USDT in reserve, so PieBot has some equity available should it need it.
 
 **Default value** - `0.02`
+
+---
 
 ### Operation
 

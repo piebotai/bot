@@ -201,6 +201,28 @@ def pre_flight_checks():
             print(colored("You need to use at least one coin pair", "red"))
             sys.exit()
 
+    # Checks whether the Buy task frequency has been defined
+    try:
+        buy_frequency
+    except NameError:
+        print(colored("Your Buy task frequency is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if buy_frequency < 1:
+            print(colored("Your Buy task frequency must be at least 1 hour", "red"))
+            sys.exit()
+
+    # Checks whether the Rebalance task frequency has been defined
+    try:
+        rebalance_frequency
+    except NameError:
+        print(colored("Your Rebalance task frequency is missing from the config file", "red"))
+        sys.exit()
+    else:
+        if rebalance_frequency < 0:
+            print(colored("Your Rebalance task frequency cannot be less than 0", "red"))
+            sys.exit()
+
     # Checks whether the maximum Buy order value has been defined and is valid
     try:
         buy_order_value
