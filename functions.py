@@ -208,7 +208,7 @@ def pre_flight_checks():
         print(colored("Your Buy task frequency is missing from the config file", "red"))
         sys.exit()
     else:
-        if buy_frequency == 0:
+        if buy_frequency < 1:
             print(colored("Your Buy task frequency must be at least 1 hour", "red"))
             sys.exit()
 
