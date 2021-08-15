@@ -146,6 +146,8 @@ Set after how many hours the **Buy** task should repeat.
 
 Set after how many hours the **Rebalance** task should repeat.
 
+You can stop the Rebalance task from running by setting the value as `0`. In this situation, PieBot would just run the Buy task, and nothing else.
+
 **Default value** - `1`
 
 ---
