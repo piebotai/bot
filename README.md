@@ -75,12 +75,10 @@ cd PieBot
 sh init.sh
 ```
 
-Install the required packages:
+`init.sh` is a simple Shell script that handles the set-up for you. It will put you on the correct Git branch, pull down the latest code, and install the required Pip packages:
 
-```
-pip3 install schedule
-pip3 install termcolor
-```
+- [Schedule](https://pypi.org/project/schedule)
+- [Termcolor](https://pypi.org/project/termcolor)
 
 ## Usage
 
