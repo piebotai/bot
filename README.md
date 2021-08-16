@@ -114,13 +114,13 @@ This can be one of two options:
 
 #### api_key
 
-The API key for your Crypto.com Exchange account
+The API key for your Crypto.com Exchange account.
 
 ---
 
 #### api_secret
 
-The API secret for your Crypto.com Exchange account
+The API secret for your Crypto.com Exchange account.
 
 ---
 
