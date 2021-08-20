@@ -187,7 +187,7 @@ python3 PieBot.py
 To start PieBot with PM2, run the above command first to make sure everything is working. If no errors come back, and you see the "Waiting to be called" message, stop the bot and start it again with PM2:
 
 ```python
-pm2 start PieBot.py --name PieBot --interpreter=python3 --time
+pm2 start PieBot.py --name PieBot --interpreter=python3
 ```
 
 ### Updating
