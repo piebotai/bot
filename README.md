@@ -190,6 +190,12 @@ To start PieBot with PM2, run the above command first to make sure everything is
 pm2 start PieBot.py --name PieBot --interpreter=python3
 ```
 
+Once it is running, you can view the logs for that PM2 process like so:
+
+```
+pm2 logs PieBot
+```
+
 ### Updating
 
 PieBot updates are pushed directly to this Git repository, so a simple `git pull` on the `main` branch is normally all that is required to run the latest version of the bot. Luckily there is a little script file you can run that handles it for you.
