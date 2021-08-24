@@ -1,4 +1,5 @@
 from functions import *
+import gc
 import schedule
 import signal
 
@@ -50,6 +51,8 @@ def buy(pairs):
 
     else:
         print(colored("Not enough USDT available", "yellow"))
+
+    gc.collect()
 
     print(colored("Waiting to be called...", "cyan"))
 
@@ -150,6 +153,11 @@ def rebalance(pairs):
     if total_orders == 0:
         current_time(True)
         print(colored("No coins were eligible to be rebalanced", "yellow"))
+
+    del order_data
+    del buy_orders_data
+    del sell_orders_data
+    gc.collect()
 
     print(colored("Waiting to be called...", "cyan"))
 
