@@ -103,7 +103,7 @@ def rebalance(pairs):
             if environment == "production":
                 order_confirmed = False
                 order_request = order_sell(order[1], order[2])
-                time.sleep(0.25)
+                time.sleep(0.1)
                 if order_request.status_code == 200:
                     order_confirmed = True
 
@@ -127,7 +127,7 @@ def rebalance(pairs):
             if environment == "production":
                 order_confirmed = False
                 order_request = order_buy(order[1], order[2])
-                time.sleep(0.25)
+                time.sleep(0.1)
                 if order_request.status_code == 200:
                     order_confirmed = True
 
