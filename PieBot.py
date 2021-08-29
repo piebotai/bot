@@ -7,6 +7,7 @@ import signal
 pre_flight_checks()
 
 
+# Hard codes the minimum order value
 min_order_value = 0.25
 
 
@@ -86,7 +87,7 @@ def rebalance(pairs):
         coin_price = pair[2]
         pair_value = pair[3]
 
-        # If the coin value is over target, sell the excess if it's difference is greater than or equal to the minimum order value
+        # The coin value is over target
         if pair_value > target_per_coin:
             difference = pair_value - target_per_coin
 
@@ -94,7 +95,7 @@ def rebalance(pairs):
                 order_value = difference / coin_price
                 sell_orders_data.append([pair[0], pair[1], order_value, difference])
 
-        # If the coin value is under target, buy more if it's difference is greater than or equal to the minimum order value
+        # The coin value is under target
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
