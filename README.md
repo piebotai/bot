@@ -165,7 +165,7 @@ The value reflects a percentage, and should be between `0` and `1`.
 
 For example, 5% = `0.05`, 15% = `0.15` etc.
 
-**Default value** - `0.025`
+**Default value** - `0.03`
 
 ---
 
