@@ -19,6 +19,8 @@ PieBot is a DCA (Dollar Cost Averaging) cryptocurrency trading bot, built with P
     - [buy_order_value](#buy_order_value)
     - [usdt_reserve](#usdt_reserve)
   - [Operation](#operation)
+    - [Running PieBot](#running-piebot)
+    - [Dev Mode](#dev-mode)
   - [Updating](#updating)
 - [Disclaimer](#disclaimer)
 - [Donate](#donate)
@@ -195,6 +197,19 @@ Once it is running, you can view the logs for that PM2 process like so:
 ```
 pm2 logs PieBot
 ```
+
+#### Dev mode
+
+By setting `environment = "dev"` in your `_config.py` file, you can run PieBot without placing any real world trades. This is a good way of running the bot for the first time to ensure everything is working, without the risk of placing real trades for real money.
+
+As PieBot is split into two distinct tasks; [Buy](#buy) and [Rebalance](#rebalance), you will need to specify which task you want to run by using one of these commands:
+
+```
+python3 PieBot.py Buy
+python3 PieBot.py Rebalance
+```
+
+When in dev mode, PieBot uses exactly the same logic as if you were running the bot in the real world. The bot attempts to connect to your account through your API key, it will collect your coin balances and work everything out it needs to. You will even see exactly the same console output. The only difference being that orders aren't actually placed.
 
 ### Updating
 
