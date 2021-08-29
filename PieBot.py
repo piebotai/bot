@@ -10,6 +10,20 @@ pre_flight_checks()
 # Hard codes the minimum order value
 min_order_value = 0.25
 
+# Checks whether the Rebalance threshold has been defined, and allows the bot to run if it hasn't
+try:
+    rebalance_threshold
+except NameError:
+    rebalance_threshold = None
+
+if rebalance_threshold is None:
+    uses_threshold = False
+else:
+    if rebalance_threshold > 0:
+        uses_threshold = True
+    else:
+        uses_threshold = False
+
 
 # Buy more coins at a regular interval
 def buy(pairs):
