@@ -1,4 +1,5 @@
 from functions import *
+import argparse
 import gc
 import schedule
 import signal
@@ -177,5 +178,14 @@ if environment == "production":
         time.sleep(1)
 
 else:
-    buy(pairs=pair_list)
-    # rebalance(pairs=pair_list)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("task")
+    args = parser.parse_args()
+    if (args.task == "buy") or (args.task == "Buy"):
+        buy(pairs=pair_list)
+
+    elif (args.task == "rebalance") or (args.task == "Rebalance"):
+        rebalance(pairs=pair_list)
+
+    else:
+        print(colored("Please specify which task you want to run", "red"))
