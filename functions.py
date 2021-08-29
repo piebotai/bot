@@ -38,10 +38,10 @@ def current_time(new_line):
 
 # Gets the total available value of the portfolio
 def get_available_portfolio_value(value):
-    # Keeps aside the defined USDT reserves
-    usdt_reserve_value = (value / 100) * (usdt_reserve * 100)
+    # Keeps aside the defined stablecoin reserves
+    stablecoin_reserve_value = (value / 100) * (stablecoin_reserve * 100)
 
-    total_available_balance = value - usdt_reserve_value
+    total_available_balance = value - stablecoin_reserve_value
 
     return total_available_balance
 
@@ -93,7 +93,7 @@ def get_pair_details(pair):
 
 
 # Gets the total value of the portfolio
-def get_portfolio_value(pairs, include_usdt):
+def get_portfolio_value(pairs, include_stablecoin):
     total_balance = 0
 
     for pair in pairs:
@@ -105,11 +105,11 @@ def get_portfolio_value(pairs, include_usdt):
 
         total_balance = total_balance + (coin_balance * coin_price)
 
-    if include_usdt:
+    if include_stablecoin:
         # Get the total balance of USDT and add it to the current collected balance
-        usdt_total_balance = get_coin_balance("USDT")
+        stablecoin_total_balance = get_coin_balance("USDT")
 
-        total_balance = total_balance + usdt_total_balance
+        total_balance = total_balance + stablecoin_total_balance
 
     return total_balance
 
@@ -236,15 +236,15 @@ def pre_flight_checks():
 
     # Checks whether the USDT reserve amount has been defined
     try:
-        usdt_reserve
+        stablecoin_reserve
     except NameError:
         print(colored("Your USDT reserve amount is missing from the config file", "red"))
         sys.exit()
     else:
-        if usdt_reserve < 0:
+        if stablecoin_reserve < 0:
             print(colored("You need to define a valid USDT reserve. If you don't want to use a reserve, set the value as 0", "red"))
             sys.exit()
-        elif usdt_reserve > 80:
+        elif stablecoin_reserve > 80:
             print(colored("Your USDT reserve must be 80% or lower", "red"))
             sys.exit()
 

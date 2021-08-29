@@ -18,13 +18,13 @@ def buy(pairs):
     print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, True)
-    total_usdt_reserve = (total_portfolio_value / 100) * (usdt_reserve * 100)
+    total_stablecoin_reserve = (total_portfolio_value / 100) * (stablecoin_reserve * 100)
 
-    total_usdt_value = get_coin_balance("USDT")
-    total_usdt_available = total_usdt_value - total_usdt_reserve
-    required_usdt = buy_order_value * len(pairs)
+    total_stablecoin_value = get_coin_balance("USDT")
+    total_stablecoin_available = total_stablecoin_value - total_stablecoin_reserve
+    required_stablecoin = buy_order_value * len(pairs)
 
-    if required_usdt <= total_usdt_available:
+    if required_stablecoin <= total_stablecoin_available:
         for pair in pairs:
             order_value = buy_order_value
 
