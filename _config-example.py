@@ -20,6 +20,11 @@ pair_list = [
 buy_frequency = 6
 rebalance_frequency = 1
 
+# The required value deviation before the coin is rebalanced.  This is a percentage
+# 0.05 = 5%
+# 0.15 = 15%
+rebalance_threshold = 0.03
+
 # The USDT value that PieBot will buy for each enabled coin pair in the "Buy" task
 buy_order_value = 0.50
 
