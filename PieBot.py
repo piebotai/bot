@@ -105,17 +105,25 @@ def rebalance(pairs):
         if pair_value > target_per_coin:
             difference = pair_value - target_per_coin
 
-            if difference >= min_order_value:
-                order_value = difference / coin_price
-                sell_orders_data.append([pair[0], pair[1], order_value, difference])
+            if uses_threshold:
+                print("Threshold")
+
+            else:
+                if difference >= min_order_value:
+                    order_value = difference / coin_price
+                    sell_orders_data.append([pair[0], pair[1], order_value, difference])
 
         # The coin value is under target
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
-            if difference >= min_order_value:
-                order_value = difference
-                buy_orders_data.append([pair[0], pair[1], order_value, difference])
+            if uses_threshold:
+                print("Threshold")
+
+            else:
+                if difference >= min_order_value:
+                    order_value = difference
+                    buy_orders_data.append([pair[0], pair[1], order_value, difference])
 
     if len(sell_orders_data) >= 1:
         for order in sell_orders_data:
