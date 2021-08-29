@@ -23,10 +23,10 @@ pair_list = [
 buy_frequency = 6
 rebalance_frequency = 1
 
-# The USDT value that PieBot will buy for each enabled coin pair in the "Buy" task
+# The value in your chosen stablecoin that PieBot will buy for each enabled coin pair in the "Buy" task
 buy_order_value = 0.50
 
-# How much USDT do you want to keep as a reserve. This is a percentage of the total portfolio balance
+# How much of your chosen stablecoin do you want to keep as a reserve. This is a percentage of the total portfolio balance
 # 0.05 = 5%
 # 0.15 = 15%
 stablecoin_reserve = 0.02
