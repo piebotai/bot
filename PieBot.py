@@ -7,7 +7,22 @@ import signal
 pre_flight_checks()
 
 
+# Hard codes the minimum order value
 min_order_value = 0.25
+
+# Checks whether the Rebalance threshold has been defined, and allows the bot to run if it hasn't
+try:
+    rebalance_threshold
+except NameError:
+    rebalance_threshold = None
+
+if rebalance_threshold is None:
+    uses_threshold = False
+else:
+    if rebalance_threshold > 0:
+        uses_threshold = True
+    else:
+        uses_threshold = False
 
 
 # Buy more coins at a regular interval
@@ -86,21 +101,37 @@ def rebalance(pairs):
         coin_price = pair[2]
         pair_value = pair[3]
 
-        # If the coin value is over target, sell the excess if it's difference is greater than or equal to the minimum order value
+        # The coin value is over target
         if pair_value > target_per_coin:
             difference = pair_value - target_per_coin
 
             if difference >= min_order_value:
-                order_value = difference / coin_price
-                sell_orders_data.append([pair[0], pair[1], order_value, difference])
+                if uses_threshold:
+                    difference_percentage = (((pair_value - target_per_coin) / target_per_coin) * 100)
 
-        # If the coin value is under target, buy more if it's difference is greater than or equal to the minimum order value
+                    if difference_percentage >= (rebalance_threshold * 100):
+                        order_value = difference / coin_price
+                        sell_orders_data.append([pair[0], pair[1], order_value, difference])
+
+                else:
+                    order_value = difference / coin_price
+                    sell_orders_data.append([pair[0], pair[1], order_value, difference])
+
+        # The coin value is under target
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
             if difference >= min_order_value:
-                order_value = difference
-                buy_orders_data.append([pair[0], pair[1], order_value, difference])
+                if uses_threshold:
+                    difference_percentage = (((target_per_coin - pair_value) / pair_value) * 100)
+
+                    if difference_percentage >= (rebalance_threshold * 100):
+                        order_value = difference
+                        buy_orders_data.append([pair[0], pair[1], order_value, difference])
+
+                else:
+                    order_value = difference
+                    buy_orders_data.append([pair[0], pair[1], order_value, difference])
 
     if len(sell_orders_data) >= 1:
         for order in sell_orders_data:

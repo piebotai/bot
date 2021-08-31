@@ -16,6 +16,7 @@ PieBot is a DCA (Dollar Cost Averaging) cryptocurrency trading bot, built with P
     - [pair_list](#pair_list)
     - [buy_frequency](#buy_frequency)
     - [rebalance_frequency](#rebalance_frequency)
+    - [rebalance_threshold](#rebalance_threshold)
     - [buy_order_value](#buy_order_value)
     - [usdt_reserve](#usdt_reserve)
   - [Operation](#operation)
@@ -152,6 +153,22 @@ You can stop the Rebalance task from running by setting the value as `0`. In thi
 
 ---
 
+#### rebalance_threshold
+
+Sets the desired price deviation a coin must meet before it is rebalanced.
+
+By specifying a target percentage, rather than just requiring the deviation to be greater than or equal to the minimum order value, you dramatically reduce the number of trades PieBot completes in any given cycle, which can help reduce fees.
+
+For example, if `rebalance_threshold` is set to `0.025`, then each coin pair must be greater than or equal to 2.5% above or below the target coin price. So, coins that are within the 0% - 2.49999...% window will not be rebalanced in this cycle.
+
+The value reflects a percentage, and should be between `0` and `1`.
+
+For example, 5% = `0.05`, 15% = `0.15` etc.
+
+**Default value** - `0.03`
+
+---
+
 #### buy_order_value
 
 The USDT value that PieBot will buy for each enabled coin pair in the Buy task.
@@ -164,7 +181,9 @@ For example, with 10 enabled coin pairs, and a `buy_order_value` of `0.5`, the B
 
 #### usdt_reserve
 
-This value tells PieBot how much USDT it should keep aside to not trade with. The value reflects a percentage, and should be between `0` and `1`.
+This value tells PieBot how much USDT it should keep aside to not trade with.
+
+The value reflects a percentage, and should be between `0` and `1`.
 
 For example, 5% = `0.05`, 15% = `0.15` etc.
 
