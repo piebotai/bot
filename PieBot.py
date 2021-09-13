@@ -1,11 +1,28 @@
 from functions import *
+import argparse
+import gc
 import schedule
 import signal
 
 pre_flight_checks()
 
 
+# Hard codes the minimum order value
 min_order_value = 0.25
+
+# Checks whether the Rebalance threshold has been defined, and allows the bot to run if it hasn't
+try:
+    rebalance_threshold
+except NameError:
+    rebalance_threshold = None
+
+if rebalance_threshold is None:
+    uses_threshold = False
+else:
+    if rebalance_threshold > 0:
+        uses_threshold = True
+    else:
+        uses_threshold = False
 
 
 # Buy more coins at a regular interval
@@ -51,6 +68,8 @@ def buy(pairs):
     else:
         print(colored("Not enough "+ stable_coin +" available", "yellow"))
 
+    gc.collect()
+
     print(colored("Waiting to be called...", "cyan"))
 
 
@@ -61,51 +80,65 @@ def rebalance(pairs):
     print(colored("Rebalance", "yellow"))
     print(colored("Placing orders...", "cyan"))
 
-    total_portfolio_value = get_portfolio_value(pairs, False)
+    order_data = []
+    total_portfolio_value = 0
+
+    for pair in pairs:
+        coin_balance = get_coin_balance(pair[0])
+        coin_price = get_coin_price(pair[1])
+        pair_value = coin_balance * coin_price
+
+        order_data.append([pair[0], pair[1], coin_price, pair_value])
+        total_portfolio_value += pair_value
 
     # Equally divide the balance by the number of coins, so we know the target value each coin should aim for
     target_per_coin = total_portfolio_value / len(pairs)
 
-    buy_orders = []
-    sell_orders = []
-    total_orders = 0
+    buy_orders_data = []
+    sell_orders_data = []
 
-    for pair in pairs:
-        # Sets null defaults
-        difference = 0
-        order_value = 0
-        pair_value = 0
+    for pair in order_data:
+        coin_price = pair[2]
+        pair_value = pair[3]
 
-        # Gets the total number of coins for this coin
-        coin_balance = get_coin_balance(pair[0])
-
-        # Gets the current price for this coin
-        coin_price = get_coin_price(pair[1])
-
-        pair_value = coin_balance * coin_price
-
-        # If the coin value is over target, sell the excess if it's difference is greater than or equal to the minimum order value
+        # The coin value is over target
         if pair_value > target_per_coin:
             difference = pair_value - target_per_coin
 
             if difference >= min_order_value:
-                order_value = difference / coin_price
-                sell_orders.append([pair[0], pair[1], order_value, difference])
+                if uses_threshold:
+                    difference_percentage = (((pair_value - target_per_coin) / target_per_coin) * 100)
 
-        # If the coin value is under target, buy more if it's difference is greater than or equal to the minimum order value
+                    if difference_percentage >= (rebalance_threshold * 100):
+                        order_value = difference / coin_price
+                        sell_orders_data.append([pair[0], pair[1], order_value, difference])
+
+                else:
+                    order_value = difference / coin_price
+                    sell_orders_data.append([pair[0], pair[1], order_value, difference])
+
+        # The coin value is under target
         elif pair_value < target_per_coin:
             difference = target_per_coin - pair_value
 
             if difference >= min_order_value:
-                order_value = difference
-                buy_orders.append([pair[0], pair[1], order_value, difference])
+                if uses_threshold:
+                    difference_percentage = (((target_per_coin - pair_value) / pair_value) * 100)
 
-    if len(sell_orders) >= 1:
-        for order in sell_orders:
+                    if difference_percentage >= (rebalance_threshold * 100):
+                        order_value = difference
+                        buy_orders_data.append([pair[0], pair[1], order_value, difference])
+
+                else:
+                    order_value = difference
+                    buy_orders_data.append([pair[0], pair[1], order_value, difference])
+
+    if len(sell_orders_data) >= 1:
+        for order in sell_orders_data:
             if environment == "production":
                 order_confirmed = False
                 order_request = order_sell(order[1], order[2])
-                time.sleep(0.25)
+                time.sleep(0.1)
                 if order_request.status_code == 200:
                     order_confirmed = True
 
@@ -124,12 +157,12 @@ def rebalance(pairs):
                 print(str(print_value) + stable_coin + " - " + order[0], end=" ")
                 print(colored("[SELL]", "magenta"))
 
-    if len(buy_orders) >= 1:
-        for order in buy_orders:
+    if len(buy_orders_data) >= 1:
+        for order in buy_orders_data:
             if environment == "production":
                 order_confirmed = False
                 order_request = order_buy(order[1], order[2])
-                time.sleep(0.25)
+                time.sleep(0.1)
                 if order_request.status_code == 200:
                     order_confirmed = True
 
@@ -148,10 +181,15 @@ def rebalance(pairs):
                 print(str(print_value) + stable_coin + " - " + order[0], end=" ")
                 print(colored("[BUY]", "green"))
 
-    total_orders = len(sell_orders) + len(buy_orders)
+    total_orders = len(sell_orders_data) + len(buy_orders_data)
     if total_orders == 0:
         current_time(True)
         print(colored("No coins were eligible to be rebalanced", "yellow"))
+
+    del order_data
+    del buy_orders_data
+    del sell_orders_data
+    gc.collect()
 
     print(colored("Waiting to be called...", "cyan"))
 
@@ -171,5 +209,14 @@ if environment == "production":
         time.sleep(1)
 
 else:
-    buy(pairs=pair_list)
-    # rebalance(pairs=pair_list)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("task")
+    args = parser.parse_args()
+    if (args.task == "buy") or (args.task == "Buy"):
+        buy(pairs=pair_list)
+
+    elif (args.task == "rebalance") or (args.task == "Rebalance"):
+        rebalance(pairs=pair_list)
+
+    else:
+        print(colored("Please specify which task you want to run", "red"))
