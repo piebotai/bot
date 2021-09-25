@@ -33,13 +33,13 @@ def buy(pairs):
     print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, True)
-    total_usdt_reserve = (total_portfolio_value / 100) * (usdt_reserve * 100)
+    total_stable_coin_reserve = (total_portfolio_value / 100) * (stable_coin_reserve * 100)
 
-    total_usdt_value = get_coin_balance("USDT")
-    total_usdt_available = total_usdt_value - total_usdt_reserve
-    required_usdt = buy_order_value * len(pairs)
+    total_stable_coin_value = get_coin_balance(stable_coin)
+    total_stable_coin_available = total_stable_coin_value - total_stable_coin_reserve
+    required_stable_coin = buy_order_value * len(pairs)
 
-    if required_usdt <= total_usdt_available:
+    if required_stable_coin <= total_stable_coin_available:
         for pair in pairs:
             order_value = buy_order_value
 
@@ -52,7 +52,7 @@ def buy(pairs):
 
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(str(print_value) + stable_coin + " - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
@@ -62,11 +62,11 @@ def buy(pairs):
             else:
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(str(print_value) + stable_coin + " - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"))
 
     else:
-        print(colored("Not enough USDT available", "yellow"))
+        print(colored("Not enough "+ stable_coin +" available", "yellow"))
 
     gc.collect()
 
@@ -144,7 +144,7 @@ def rebalance(pairs):
 
                 print_value = round(order[3], 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(str(print_value) + stable_coin + " - " + order[0], end=" ")
                 print(colored("[SELL]", "magenta"))
 
                 if not order_confirmed:
@@ -154,7 +154,7 @@ def rebalance(pairs):
             else:
                 print_value = round(order[3], 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(str(print_value) + stable_coin + " - " + order[0], end=" ")
                 print(colored("[SELL]", "magenta"))
 
     if len(buy_orders_data) >= 1:
@@ -168,7 +168,7 @@ def rebalance(pairs):
 
                 print_value = round(order[3], 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(str(print_value) + stable_coin + " - " + order[0], end=" ")
                 print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
@@ -178,7 +178,7 @@ def rebalance(pairs):
             else:
                 print_value = round(order[3], 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + order[0], end=" ")
+                print(str(print_value) + stable_coin + " - " + order[0], end=" ")
                 print(colored("[BUY]", "green"))
 
     total_orders = len(sell_orders_data) + len(buy_orders_data)
