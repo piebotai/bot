@@ -59,8 +59,8 @@ def get_coin_balance(coin):
 	}
 
 	coin_balance_response = requests.post("https://api.crypto.com/v2/private/get-account-summary",
-										  headers={"Content-type": "application/json"},
-										  data=json.dumps(sign_request(req=coin_balance_request)))
+		headers={"Content-type": "application/json"},
+		data=json.dumps(sign_request(req=coin_balance_request)))
 	coin_balance_data = json.loads(coin_balance_response.content)
 	coin_total_balance = coin_balance_data["result"]["accounts"][0]["available"]
 
@@ -137,8 +137,8 @@ def order_buy(pair, notional):
 	}
 
 	order_buy_response = requests.post("https://api.crypto.com/v2/private/create-order",
-								  headers={"Content-type": "application/json"},
-								  data=json.dumps(sign_request(req=order_buy_request)))
+		headers={"Content-type": "application/json"},
+		data=json.dumps(sign_request(req=order_buy_request)))
 
 	return order_buy_response
 
@@ -166,8 +166,8 @@ def order_sell(pair, quantity):
 	}
 
 	order_sell_response = requests.post("https://api.crypto.com/v2/private/create-order",
-									   headers={"Content-type": "application/json"},
-									   data=json.dumps(sign_request(req=order_sell_request)))
+		headers={"Content-type": "application/json"},
+		data=json.dumps(sign_request(req=order_sell_request)))
 
 	return order_sell_response
 
@@ -260,8 +260,8 @@ def pre_flight_checks():
 	}
 
 	init_response = requests.post("https://api.crypto.com/v2/private/get-account-summary",
-								  headers={"Content-type": "application/json"},
-								  data=json.dumps(sign_request(req=init_request)))
+		headers={"Content-type": "application/json"},
+		data=json.dumps(sign_request(req=init_request)))
 	init_status = init_response.status_code
 
 	if init_status == 200:
