@@ -200,7 +200,7 @@ def rebalance(pairs):
 		gc.collect()
 
 	else:
-		print("NO!")
+		print(colored("No coins were eligible to be rebalanced", "yellow"))
 
 	print(colored("Waiting to be called...", "cyan"))
 
