@@ -46,6 +46,8 @@ If there is not enough USDT to complete the whole order, PieBot will skip the ta
 
 The Rebalance task tries to keep all the values of your holdings the same, by selling coins whose values are over the average, and using those profits to buy more of the coins that are below the average.
 
+PieBot will ignore any enabled coin pairs that have a balance of 0.
+
 PieBot will first run through the sell orders, then the buy orders. This is to ensure there is enough USDT available when it comes to the buy orders, just in case the `usdt_reserve` isn't adequate.
 
 The frequency at which this task runs is configured using the `rebalance_frequency` environment variable.
