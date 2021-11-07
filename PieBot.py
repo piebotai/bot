@@ -81,115 +81,126 @@ def rebalance(pairs):
 	print(colored("Placing orders...", "cyan"))
 
 	order_data = []
+	pairs_with_value = []
 	total_portfolio_value = 0
 
 	for pair in pairs:
 		coin_balance = get_coin_balance(pair[0])
-		coin_price = get_coin_price(pair[1])
-		pair_value = coin_balance * coin_price
 
-		order_data.append([pair[0], pair[1], coin_price, pair_value])
-		total_portfolio_value += pair_value
+		if coin_balance > 0:
+			pairs_with_value.append(pair)
 
-	# Equally divide the balance by the number of coins, so we know the target value each coin should aim for
-	target_per_coin = total_portfolio_value / len(pairs)
+	if pairs_with_value:
+		for pair in pairs_with_value:
+			coin_balance = get_coin_balance(pair[0])
+			coin_price = get_coin_price(pair[1])
+			pair_value = coin_balance * coin_price
 
-	buy_orders_data = []
-	sell_orders_data = []
+			order_data.append([pair[0], pair[1], coin_price, pair_value])
+			total_portfolio_value += pair_value
 
-	for pair in order_data:
-		coin_price = pair[2]
-		pair_value = pair[3]
+		# Equally divide the balance by the number of coins, so we know the target value each coin should aim for
+		target_per_coin = total_portfolio_value / len(pairs_with_value)
 
-		# The coin value is over target
-		if pair_value > target_per_coin:
-			difference = pair_value - target_per_coin
+		buy_orders_data = []
+		sell_orders_data = []
 
-			if difference >= min_order_value:
-				if uses_threshold:
-					difference_percentage = (((pair_value - target_per_coin) / target_per_coin) * 100)
+		for pair in order_data:
+			coin_price = pair[2]
+			pair_value = pair[3]
 
-					if difference_percentage >= (rebalance_threshold * 100):
+			# The coin value is over target
+			if pair_value > target_per_coin:
+				difference = pair_value - target_per_coin
+
+				if difference >= min_order_value:
+					if uses_threshold:
+						difference_percentage = (((pair_value - target_per_coin) / target_per_coin) * 100)
+
+						if difference_percentage >= (rebalance_threshold * 100):
+							order_value = difference / coin_price
+							sell_orders_data.append([pair[0], pair[1], order_value, difference])
+
+					else:
 						order_value = difference / coin_price
 						sell_orders_data.append([pair[0], pair[1], order_value, difference])
 
-				else:
-					order_value = difference / coin_price
-					sell_orders_data.append([pair[0], pair[1], order_value, difference])
+			# The coin value is under target
+			elif pair_value < target_per_coin:
+				difference = target_per_coin - pair_value
 
-		# The coin value is under target
-		elif pair_value < target_per_coin:
-			difference = target_per_coin - pair_value
+				if difference >= min_order_value:
+					if uses_threshold:
+						difference_percentage = (((target_per_coin - pair_value) / pair_value) * 100)
 
-			if difference >= min_order_value:
-				if uses_threshold:
-					difference_percentage = (((target_per_coin - pair_value) / pair_value) * 100)
+						if difference_percentage >= (rebalance_threshold * 100):
+							order_value = difference
+							buy_orders_data.append([pair[0], pair[1], order_value, difference])
 
-					if difference_percentage >= (rebalance_threshold * 100):
+					else:
 						order_value = difference
 						buy_orders_data.append([pair[0], pair[1], order_value, difference])
 
+		if len(sell_orders_data) >= 1:
+			for order in sell_orders_data:
+				if environment == "production":
+					order_confirmed = False
+					order_request = order_sell(order[1], order[2])
+					time.sleep(0.1)
+					if order_request.status_code == 200:
+						order_confirmed = True
+
+					print_value = round(order[3], 2)
+					current_time(True)
+					print(str(print_value) + " USDT - " + order[0], end=" ")
+					print(colored("[SELL]", "magenta"))
+
+					if not order_confirmed:
+						print(order_request.status_code, order_request.reason)
+						print(order_request.content)
+
 				else:
-					order_value = difference
-					buy_orders_data.append([pair[0], pair[1], order_value, difference])
+					print_value = round(order[3], 2)
+					current_time(True)
+					print(str(print_value) + " USDT - " + order[0], end=" ")
+					print(colored("[SELL]", "magenta"))
 
-	if len(sell_orders_data) >= 1:
-		for order in sell_orders_data:
-			if environment == "production":
-				order_confirmed = False
-				order_request = order_sell(order[1], order[2])
-				time.sleep(0.1)
-				if order_request.status_code == 200:
-					order_confirmed = True
+		if len(buy_orders_data) >= 1:
+			for order in buy_orders_data:
+				if environment == "production":
+					order_confirmed = False
+					order_request = order_buy(order[1], order[2])
+					time.sleep(0.1)
+					if order_request.status_code == 200:
+						order_confirmed = True
 
-				print_value = round(order[3], 2)
-				current_time(True)
-				print(str(print_value) + " USDT - " + order[0], end=" ")
-				print(colored("[SELL]", "magenta"))
+					print_value = round(order[3], 2)
+					current_time(True)
+					print(str(print_value) + " USDT - " + order[0], end=" ")
+					print(colored("[BUY]", "green"))
 
-				if not order_confirmed:
-					print(order_request.status_code, order_request.reason)
-					print(order_request.content)
+					if not order_confirmed:
+						print(order_request.status_code, order_request.reason)
+						print(order_request.content)
 
-			else:
-				print_value = round(order[3], 2)
-				current_time(True)
-				print(str(print_value) + " USDT - " + order[0], end=" ")
-				print(colored("[SELL]", "magenta"))
+				else:
+					print_value = round(order[3], 2)
+					current_time(True)
+					print(str(print_value) + " USDT - " + order[0], end=" ")
+					print(colored("[BUY]", "green"))
 
-	if len(buy_orders_data) >= 1:
-		for order in buy_orders_data:
-			if environment == "production":
-				order_confirmed = False
-				order_request = order_buy(order[1], order[2])
-				time.sleep(0.1)
-				if order_request.status_code == 200:
-					order_confirmed = True
+		total_orders = len(sell_orders_data) + len(buy_orders_data)
+		if total_orders == 0:
+			current_time(True)
+			print(colored("No coins were eligible to be rebalanced", "yellow"))
 
-				print_value = round(order[3], 2)
-				current_time(True)
-				print(str(print_value) + " USDT - " + order[0], end=" ")
-				print(colored("[BUY]", "green"))
+		del order_data
+		del buy_orders_data
+		del sell_orders_data
+		gc.collect()
 
-				if not order_confirmed:
-					print(order_request.status_code, order_request.reason)
-					print(order_request.content)
-
-			else:
-				print_value = round(order[3], 2)
-				current_time(True)
-				print(str(print_value) + " USDT - " + order[0], end=" ")
-				print(colored("[BUY]", "green"))
-
-	total_orders = len(sell_orders_data) + len(buy_orders_data)
-	if total_orders == 0:
-		current_time(True)
+	else:
 		print(colored("No coins were eligible to be rebalanced", "yellow"))
-
-	del order_data
-	del buy_orders_data
-	del sell_orders_data
-	gc.collect()
 
 	print(colored("Waiting to be called...", "cyan"))
 
