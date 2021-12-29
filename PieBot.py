@@ -20,7 +20,7 @@ def buy(pairs):
     total_portfolio_value = get_portfolio_value(pairs, True)
     total_stablecoin_reserve = (total_portfolio_value / 100) * (stablecoin_reserve * 100)
 
-    total_stablecoin_value = get_coin_balance("USDT")
+    total_stablecoin_value = get_coin_balance(stablecoin)
     total_stablecoin_available = total_stablecoin_value - total_stablecoin_reserve
     required_stablecoin = buy_order_value * len(pairs)
 
@@ -37,7 +37,7 @@ def buy(pairs):
 
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(str(print_value) + " ", stablecoin, " - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"))
 
                 if not order_confirmed:
@@ -47,11 +47,11 @@ def buy(pairs):
             else:
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " USDT - " + pair[0], end=" ")
+                print(str(print_value) + " ", stablecoin, " - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"))
 
     else:
-        print(colored("Not enough USDT available", "yellow"))
+        print(colored("Not enough ", stablecoin, " available", "yellow"))
 
     gc.collect()
 
