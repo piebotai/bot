@@ -238,14 +238,14 @@ def pre_flight_checks():
     try:
         stablecoin_reserve
     except NameError:
-        print(colored("Your ", stablecoin, " reserve amount is missing from the config file", "red"))
+        print(colored("Your " + stablecoin + " reserve amount is missing from the config file", "red"))
         sys.exit()
     else:
         if stablecoin_reserve < 0:
-            print(colored("You need to define a valid ", stablecoin, " reserve. If you don't want to use a reserve, set the value as 0", "red"))
+            print(colored("You need to define a valid " + stablecoin + " reserve. If you don't want to use a reserve, set the value as 0", "red"))
             sys.exit()
         elif stablecoin_reserve > 80:
-            print(colored("Your ", stablecoin, " reserve must be 80% or lower", "red"))
+            print(colored("Your " + stablecoin + " reserve must be 80% or lower", "red"))
             sys.exit()
 
     # Send a private request to test if the API key and API secret are correct

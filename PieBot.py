@@ -47,11 +47,11 @@ def buy(pairs):
             else:
                 print_value = round(order_value, 2)
                 current_time(True)
-                print(str(print_value) + " ", stablecoin, " - " + pair[0], end=" ")
+                print(str(print_value) + " " + stablecoin + " - " + pair[0], end=" ")
                 print(colored("[BUY]", "green"))
 
     else:
-        print(colored("Not enough ", stablecoin, " available", "yellow"))
+        print(colored("Not enough " + stablecoin + " available", "yellow"))
 
     gc.collect()
 
