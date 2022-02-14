@@ -39,13 +39,13 @@ The Buy task simply buys a set amount of each of your enabled coins.
 
 The value PieBot buys for each coin is set in the `_config.py` file using the `buy_order_value` environment variable. This can be adjusted to meet the needs of your strategy, as well as the frequency at which this task runs, using the `buy_frequency` environment variable.
 
-If there is not enough USDT to complete the whole order, PieBot will skip the task and wait until it is called again.
+If there is not enough stablecoin to complete the whole order, PieBot will skip the task and wait until it is called again.
 
 ### Rebalance
 
 The Rebalance task tries to keep all the values of your holdings the same, by selling coins whose values are over the average, and using those profits to buy more of the coins that are below the average.
 
-PieBot will first run through the sell orders, then the buy orders. This is to ensure there is enough USDT available when it comes to the buy orders, just in case the `usdt_reserve` isn't adequate.
+PieBot will first run through the sell orders, then the buy orders. This is to ensure there is enough stablecoin available when it comes to the buy orders, just in case the `stablecoin_reserve` isn't adequate.
 
 The frequency at which this task runs is configured using the `rebalance_frequency` environment variable.
 
@@ -55,7 +55,7 @@ PieBot has no maximum order value for buying or selling a holding to bring it ba
 
 Each order placed during the Buy and Rebalance task is subject to a minimum order value.
 
-This value cannot be changed, and is set at `0.25` USDT per coin. The reasons for this are as follows:
+This value cannot be changed, and is set at `0.25` stablecoin per coin. The reasons for this are as follows:
 
 - Firstly, due to the nature of quantity and price decimal points, some coins have a much larger minimum order value than others. For exmaple, `ATOM` only has 2 decimal places for quantity, so `0.01` (the smallest amount) of `ATOM` works out at `0.133 USDT`*. In this example, if an order was placed with a value of `0.12` or lower, the order would be rejected by the exchange, which would make it hard for PieBot to keep your holdings balanced
 - Secondly, it prevents situations where the bot might want to rebalance a coin pair if it's `0.01 USDT` over target, which is not an efficent use of trading fees
@@ -154,21 +154,21 @@ You can stop the Rebalance task from running by setting the value as `0`. In thi
 
 #### buy_order_value
 
-The USDT value that PieBot will buy for each enabled coin pair in the Buy task.
+The stablecoin value that PieBot will buy for each enabled coin pair in the Buy task.
 
-For example, with 10 enabled coin pairs, and a `buy_order_value` of `0.5`, the Buy task would use a total of `5.00 USDT` - `0.5 * 10` each time it is run.
+For example, with 10 enabled coin pairs, using `USDT` as the stablecoin, and a `buy_order_value` of `0.5`, the Buy task would use a total of `5.00 USDT` - `0.5 * 10` each time it is run.
 
 **Default value** - `0.50`
 
 ---
 
-#### usdt_reserve
+#### stablecoin_reserve
 
-This value tells PieBot how much USDT it should keep aside to not trade with. The value reflects a percentage, and should be between `0` and `1`.
+This value tells PieBot how much stablecoin it should keep aside to not trade with. The value reflects a percentage, and should be between `0` and `1`.
 
 For example, 5% = `0.05`, 15% = `0.15` etc.
 
-**It is strongly recommended that you don't set this value as 0.** It's a good idea to leave some USDT in reserve, so PieBot has some equity available should it need it.
+**It is strongly recommended that you don't set this value as 0.** It's a good idea to leave some stablecoin in reserve, so PieBot has some equity available should it need it.
 
 **Default value** - `0.02`
 

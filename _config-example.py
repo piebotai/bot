@@ -2,7 +2,7 @@ environment = "production"
 api_key = "xxx"
 api_secret = "xxx"
 
-# Set the stablecoin you want to trade with
+# Set the stablecoin you want to trade with. (e.g. USDT or USDC)
 stablecoin = "USDT"
 
 # The list of coin pairs you want to trade with

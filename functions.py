@@ -106,8 +106,8 @@ def get_portfolio_value(pairs, include_stablecoin):
         total_balance = total_balance + (coin_balance * coin_price)
 
     if include_stablecoin:
-        # Get the total balance of USDT and add it to the current collected balance
-        stablecoin_total_balance = get_coin_balance("USDT")
+        # Get the total balance of chosen stablecoin and add it to the current collected balance
+        stablecoin_total_balance = get_coin_balance(stablecoin)
 
         total_balance = total_balance + stablecoin_total_balance
 
@@ -234,18 +234,18 @@ def pre_flight_checks():
             print(colored("Your Buy order value cannot be smaller than the minimum order value", "red"))
             sys.exit()
 
-    # Checks whether the USDT reserve amount has been defined
+    # Checks whether the stablecoin reserve amount has been defined
     try:
         stablecoin_reserve
     except NameError:
-        print(colored("Your USDT reserve amount is missing from the config file", "red"))
+        print(colored("Your " + stablecoin + " reserve amount is missing from the config file", "red"))
         sys.exit()
     else:
         if stablecoin_reserve < 0:
-            print(colored("You need to define a valid USDT reserve. If you don't want to use a reserve, set the value as 0", "red"))
+            print(colored("You need to define a valid " + stablecoin + " reserve. If you don't want to use a reserve, set the value as 0", "red"))
             sys.exit()
         elif stablecoin_reserve > 80:
-            print(colored("Your USDT reserve must be 80% or lower", "red"))
+            print(colored("Your " + stablecoin + " reserve must be 80% or lower", "red"))
             sys.exit()
 
     # Send a private request to test if the API key and API secret are correct
@@ -254,7 +254,7 @@ def pre_flight_checks():
         "method": "private/get-account-summary",
         "api_key": api_key,
         "params": {
-            "currency": "USDT"
+            "currency": stablecoin
         },
         "nonce": int(time.time() * 1000)
     }
