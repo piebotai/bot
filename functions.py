@@ -71,7 +71,7 @@ def get_coin_balance(coin):
 def get_coin_price(pair):
     get_price_response = requests.get("https://api.crypto.com/v2/public/get-ticker?instrument_name=" + pair)
     ticker = json.loads(get_price_response.content)
-    coin_price = ticker["result"]["data"]["b"]
+    coin_price = float(ticker["result"]["data"][0]["b"])
 
     return coin_price
 
@@ -271,6 +271,7 @@ def pre_flight_checks():
     else:
         # Could not connect to the account
         print(colored("Could not connect to your account. Please ensure the API key and API secret are correct and have the right privileges", "red"))
+        print(init_response.text)
         sys.exit()
 
 
