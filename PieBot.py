@@ -26,12 +26,15 @@ def buy(pairs):
     print(colored("Buy", "yellow"))
     print(colored("Placing orders...", "cyan"))
     if required_stablecoin <= total_stablecoin_available:
+        #CDC requires a unique id for each order
+        order_id = 100
         for pair in pairs:
             order_value = buy_order_value
 
             if environment == "production":
                 order_confirmed = False
-                order = order_buy(pair[1], order_value)
+                order = order_buy(pair[1], order_value, order_id)
+                order_id += 1
                 time.sleep(0.1)
                 if order.status_code == 200:
                     order_confirmed = True

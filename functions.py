@@ -115,7 +115,7 @@ def get_portfolio_value(pairs, include_stablecoin):
 
 
 # Submits a buy order
-def order_buy(pair, notional):
+def order_buy(pair, notional, order_id):
     # Finds the required price precision for this coin pair
     pair_data = get_pair_details(pair)
     price_precision = pair_data["price_decimals"]
@@ -124,7 +124,7 @@ def order_buy(pair, notional):
     notional = "%0.*f" % (price_precision, notional)
 
     order_buy_request = {
-        "id": 100,
+        "id": order_id,
         "method": "private/create-order",
         "api_key": api_key,
         "params": {
