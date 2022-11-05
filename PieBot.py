@@ -14,8 +14,6 @@ min_order_value = 0.25
 def buy(pairs):
     # Let users know the bot has been called and is running
     print()
-    print(colored("Buy", "yellow"))
-    print(colored("Placing orders...", "cyan"))
 
     total_portfolio_value = get_portfolio_value(pairs, True)
     total_stablecoin_reserve = (total_portfolio_value / 100) * (stablecoin_reserve * 100)
@@ -24,6 +22,9 @@ def buy(pairs):
     total_stablecoin_available = total_stablecoin_value - total_stablecoin_reserve
     required_stablecoin = buy_order_value * len(pairs)
 
+    print("Current stable count balance: ", colored(total_stablecoin_value, "green"))
+    print(colored("Buy", "yellow"))
+    print(colored("Placing orders...", "cyan"))
     if required_stablecoin <= total_stablecoin_available:
         for pair in pairs:
             order_value = buy_order_value
